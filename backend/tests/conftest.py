@@ -15,6 +15,7 @@ from app.main import create_app
 
 HEADERS = {"Origin": "http://localhost:5173", "X-KageX-Request": "1"}
 PASSWORD = "correct horse battery staple"
+ALEMBIC_INI = Path(__file__).resolve().parents[1] / "alembic.ini"
 
 
 @pytest.fixture
@@ -50,7 +51,7 @@ def engine(settings: Settings) -> Iterator[Engine]:
         connect_args={"options": f"-c search_path={schema}"},
     )
     try:
-        config = Config("alembic.ini")
+        config = Config(str(ALEMBIC_INI))
         with isolated.begin() as connection:
             config.attributes["connection"] = connection
             command.upgrade(config, "head")

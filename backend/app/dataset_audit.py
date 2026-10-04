@@ -5,6 +5,8 @@ import json
 import math
 import re
 import statistics
+import subprocess
+import sys
 import zipfile
 from collections import Counter
 from pathlib import Path
@@ -278,14 +280,16 @@ def profile(root: Path, dataset: Dataset) -> dict[str, Any]:
         return bugsinpy_profile(root)
     if dataset.language == "javascript":
         return bugsjs_profile(root)
-    return {
-        "records": None,
-        "missingness": None,
-        "duplicates": None,
-        "class_balance": None,
-        "reason": (
-            "External PyTraceBugs artifact returned HTTP 404. Only upstream "
-            "README and LICENSE were acquired; descriptions are not measured "
-            "dataset findings."
-        ),
-    }
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "app.pytracebugs_audit",
+            str(root / "pytracebugs_dataset_v1.rar"),
+        ],
+        stdin=subprocess.DEVNULL,
+        capture_output=True,
+        check=True,
+        timeout=610,
+    )
+    return dict(json.loads(result.stdout))

@@ -10,10 +10,16 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, JsonValue, SecretStr
+from pydantic import BaseModel, ConfigDict, Field, JsonValue, SecretStr, model_validator
 
 from app.core.config import Settings
-from app.dataset_sources import Dataset, Source, sources
+from app.dataset_sources import (
+    PYTRACE_ARCHIVE,
+    PYTRACE_ARCHIVE_BYTES,
+    Dataset,
+    Source,
+    sources,
+)
 from app.services.storage import extract_archive
 
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -36,7 +42,14 @@ def archive_limits() -> Settings:
 
 class Artifact(Source):
     sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
-    size_bytes: int = Field(ge=0, le=MAX_BYTES)
+    size_bytes: int = Field(ge=0, le=PYTRACE_ARCHIVE_BYTES)
+
+    @model_validator(mode="after")
+    def bounded_size(self) -> Artifact:
+        limit = PYTRACE_ARCHIVE_BYTES if self.url == PYTRACE_ARCHIVE else MAX_BYTES
+        if self.size_bytes > limit:
+            raise ValueError("Artifact exceeds its approved source size limit")
+        return self
 
 
 class Manifest(BaseModel):
@@ -101,22 +114,35 @@ def download(source: Source, target: Path, expected: Artifact | None) -> Artifac
         source.url,
         headers={"User-Agent": "KageX-Phase4A-audit", "Accept-Encoding": "identity"},
     )
-    deadline = time.monotonic() + 120
+    is_pytrace_archive = source.url == PYTRACE_ARCHIVE
+    limit = PYTRACE_ARCHIVE_BYTES if is_pytrace_archive else MAX_BYTES
+    deadline = time.monotonic() + (3600 if is_pytrace_archive else 120)
     total = 0
     created = False
     try:
-        with opener.open(request, timeout=20) as response, target.open("xb") as output:
+        with (
+            opener.open(request, timeout=60 if is_pytrace_archive else 20) as response,
+            target.open("xb") as output,
+        ):
             created = True
             advertised = response.headers.get("Content-Length")
-            if advertised and int(advertised) > MAX_BYTES:
-                raise ValueError("Artifact exceeds the 100 MiB download limit")
+            if advertised and int(advertised) > limit:
+                raise ValueError("Artifact exceeds its approved download limit")
             while block := response.read(65536):
+                if (
+                    is_pytrace_archive
+                    and total == 0
+                    and not block.startswith(b"Rar!\x1a\x07\x01\x00")
+                ):
+                    raise ValueError("Expected RAR5 archive, not an error page")
                 total += len(block)
-                if total > MAX_BYTES or time.monotonic() > deadline:
+                if total > limit or time.monotonic() > deadline:
                     raise ValueError("Dataset download resource limit exceeded")
                 output.write(block)
             if advertised and total != int(advertised):
                 raise ValueError("Incomplete dataset download")
+            if is_pytrace_archive and total != PYTRACE_ARCHIVE_BYTES:
+                raise ValueError("Incomplete PyTraceBugs archival payload")
         digest = checksum(target)
         if expected and (digest != expected.sha256 or total != expected.size_bytes):
             raise ValueError(
@@ -124,6 +150,8 @@ def download(source: Source, target: Path, expected: Artifact | None) -> Artifac
             )
         if source.upstream_md5 and checksum(target, "md5") != source.upstream_md5:
             raise ValueError("Upstream archival checksum mismatch")
+        if source.upstream_sha1 and checksum(target, "sha1") != source.upstream_sha1:
+            raise ValueError("Archival payload SHA-1 mismatch")
         return Artifact(**source.model_dump(), sha256=digest, size_bytes=total)
     except BaseException:
         if created:

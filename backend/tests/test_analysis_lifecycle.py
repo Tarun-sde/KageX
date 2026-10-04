@@ -15,7 +15,7 @@ from app.core.config import Settings
 from app.models import now
 from app.models.analysis import AnalysisEntity, AnalysisRun, RunStatus
 from app.services.analysis import execute_analysis
-from tests.conftest import PASSWORD, project, register
+from tests.conftest import ALEMBIC_INI, PASSWORD, project, register
 from tests.test_analyzers import FIXTURES
 from tests.test_ingestion import archive
 
@@ -265,7 +265,7 @@ def test_phase2_data_survives_upgrade_and_analysis_rollback(
 ) -> None:
     register(client)
     identifier = ready(client)
-    config = Config("alembic.ini")
+    config = Config(str(ALEMBIC_INI))
     with engine.begin() as connection:
         config.attributes["connection"] = connection
         command.downgrade(config, "6e605e1f5bed")

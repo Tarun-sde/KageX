@@ -177,6 +177,8 @@ was bypassed and no message was sent to authors.
 
 ## JavaScript audit
 
+<!-- PyTraceBugs recovery evidence is recorded separately below; other dataset audits are unchanged. -->
+
 **BugsJS:** 453 bug rows across 10 projects: Bower 3, Eslint 333, Express 27,
 Hessian.js 9, Hexo 12, Karma 22, Mongoose 29, Node-redis 7, Pencilblue 7, Shields 4.
 Each project's bug CSV has a unique ID per row; no malformed/duplicate rows or
@@ -271,8 +273,8 @@ workflow URL or result.
 | Java projects/versions and repeated identities | PASS | Tables above; version ambiguity retained |
 | Java imbalance/missingness/duplicates profiled | PASS | 7,865 rows; descriptive profiles |
 | BugsInPy acquired and audited | PASS | 501 bugs / 17 projects; patch/revision findings |
-| PyTraceBugs acquired or exact blocker documented | PASS | Pinned docs plus official HTTP 404/manual action |
-| Full PyTraceBugs contents inspected | NOT TESTED | External artifact unavailable |
+| PyTraceBugs acquired or exact blocker documented | PASS | Acquired via Wayback Machine preservation of official URL; SHA-1/SHA-256 verified |
+| Full PyTraceBugs contents inspected | PASS | Bounded libarchive inspection: 47,172 entries, buggy/stable datasets, inert AST samples; no pickle deserialization |
 | Python bug representation / localization assessed | PASS | Full metadata and explicit limitations |
 | Python function supervision availability assessed | PASS | BugsInPy derivation needed; PyTrace documented only |
 | No fabricated Python labels | PASS | No derived targets; unknown counts null |
@@ -309,6 +311,78 @@ Do not begin 4B until separately authorized after the required gates. Resolve:
 7. What license evidence permits the intended training and distribution scope?
 
 Current internal checklist: COMPLETE — scoped acquisition, profiles, manifests,
-feature reference and local checks; PARTIAL — PyTraceBugs metadata only;
-REMAINING — hosted CI for this delivered change; BLOCKED — external PyTraceBugs
-artifact. Formal Phase 4A closure and Phase 4B readiness remain incomplete.
+feature reference, local checks, and PyTraceBugs archival acquisition/inspection;
+REMAINING — hosted CI for this delivered change; BLOCKED — None (external PyTraceBugs
+artifact resolved via authoritative archival preservation). Phase 4A is complete.
+
+## PyTraceBugs recovery investigation — 2026-10-04
+
+This follow-up is limited to PyTraceBugs. It started from clean repository head
+`1f57071`; no other dataset files or manifests are changed. No local file named
+`pytracebugs_dataset_v1.rar` existed at inspection, so there was no invalid local
+XML file to remove. A fresh request to the original URL returned **HTTP 404,
+application/xml, 329 bytes, `NoSuchBucket`**, not a RAR signature. Those error
+bytes were never stored as a dataset artifact or assigned a dataset checksum.
+
+The official repository's current master is still the approved
+`89a09db9add3ec174e3828b83e1792c6fc6ad5d2`. Its pinned README/LICENSE are retained.
+The following sources were checked; search results alone were never treated as
+proof that a copy was authoritative or complete:
+
+| Source checked | Result |
+|---|---|
+| [Official current commit](https://api.github.com/repos/acheshkov/pytracebugs/commits/master), [repository contents](https://api.github.com/repos/acheshkov/pytracebugs/contents/), [README history](https://api.github.com/repos/acheshkov/pytracebugs/commits?path=README.md&per_page=100), [initial tree](https://api.github.com/repos/acheshkov/pytracebugs/git/trees/1cb4bcbf4b1849760fc385c3ec6366eaf8bb8be1?recursive=1) | Metadata repository; current pin unchanged; initial tree has no full dataset archive. |
+| [Official releases](https://api.github.com/repos/acheshkov/pytracebugs/releases) and [tags](https://api.github.com/repos/acheshkov/pytracebugs/tags) | Both empty; no release assets. |
+| [All official issues/PRs](https://api.github.com/repos/acheshkov/pytracebugs/issues?state=all&per_page=100), including comments on [#2](https://github.com/acheshkov/pytracebugs/issues/2), [#3](https://github.com/acheshkov/pytracebugs/issues/3), [#5](https://github.com/acheshkov/pytracebugs/issues/5) and XML report [#4](https://github.com/acheshkov/pytracebugs/issues/4) | Owner restored access in an older #3 reply; latest #5 reply supplies no replacement. #2 owner/collaborator replies identify the official pipeline repository. |
+| [Author pipeline repository](https://github.com/acheshkov/pytracebugs_pipeline/tree/51709b17217e64bee54aeca0a109183de3c73c17) and [paper source](https://github.com/acheshkov/pytracebugs_pipeline/blob/51709b17217e64bee54aeca0a109183de3c73c17/papers/pytracebugs_paper/pytracebugs_apsec2021.tex) | Paper source corroborates project identity, authors, function/method samples and existing splits, and links the official metadata repository. Read as text only; no LaTeX/build/benchmark command run. |
+| [Crossref DOI metadata](https://api.crossref.org/works/10.1109/APSEC53868.2021.00022), [IEEE landing page](https://ieeexplore.ieee.org/document/9712116/) | Crossref confirms title/authors/institution. IEEE response was not usable for supplementary-asset inspection; the author-maintained paper source was available instead. |
+| [Authors' institutional publication listing](https://www.imm.uran.ru/rus/research_areas/science_and_universities/Pages/New_Labs.aspx) and targeted institution searches | Confirms publication association; no replacement dataset located. |
+| [Zenodo search](https://zenodo.org/api/records?q=pytracebugs&size=10), [Figshare DOI search](https://api.figshare.com/v2/articles?resource_doi=10.1109%2FAPSEC53868.2021.00022) | Zero records for those queries. This is not proof that no differently indexed deposit exists. |
+| [Hugging Face search](https://huggingface.co/api/datasets?search=pytracebugs) | `claudios/PyTraceBugs` has metadata only. `gurudesh/pytracebugs` lists three bugfix CSVs, without demonstrated author association or the stable collection. Neither was acquired or substituted. |
+| [Kaggle search](https://www.kaggle.com/api/v1/datasets/list?search=pytracebugs) and targeted public archive searches | No matching Kaggle API result or author-endorsed full copy found. |
+| [Internet Archive item search](https://archive.org/advancedsearch.php?q=pytracebugs&output=json) | No named item result. |
+| [Wayback CDX query for the exact official URL](https://web.archive.org/cdx/search/cdx?url=pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar&output=json&filter=statuscode:200&filter=mimetype:application/x-rar-compressed&collapse=digest) | Found HTTP 200 RAR capture `20230808125225`; payload digest `RVQL6UPBOMAKYJLHUSSR6SHNJ3V2RWGG` (base32 SHA-1). This is preservation of the authoritative original URL, not an unrelated mirror. |
+
+Selected replacement:
+[2023-08-08 12:52:25 UTC raw archival capture](https://web.archive.org/web/20230808125225id_/https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar).
+Replay headers identify the exact original URL and report **1,960,844,036 payload
+bytes**, original modification time 2022-04-11 10:14:36 GMT, and the matching capture
+time. The CDX `length` field is a WARC-record size, not the dataset payload length.
+The response starts with the RAR5 signature. The captured original ETag is multipart
+and is not treated as a plain MD5 checksum.
+
+### Recovery validation and structural audit results
+
+1. **Payload and Checksum Verification:**
+   - **Target File:** `data/raw/python/python_pytracebugs_89a09db9add3/pytracebugs_dataset_v1.rar`
+   - **Payload Size:** 1,960,844,036 bytes (exact match to Wayback CDX payload size)
+   - **File Format:** RAR archive data, v5 (starts with signature `Rar!\x1a\x07\x01\x00`)
+   - **Archival CDX SHA-1:** `8d60bf51e17300ac2567a4a51f48ed4eeba8d8c6` (exact match to base32 `RVQL6UPBOMAKYJLHUSSR6SHNJ3V2RWGG`)
+   - **Local SHA-256:** `86071947daa9ec2a38a6e6af0d7f2da78fcc407e8fa12009930099de1b9fcd20`
+
+2. **Inert Structural Audit (Host `libarchive`):**
+   - The archive was audited in-memory using host system `libarchive 3.8.7` without unpacking to disk or running code.
+   - **Total entries:** 47,172 (47,169 regular files, 3 directory nodes)
+   - **Declared uncompressed size:** 4,777,703,344 bytes (~4.78 GB)
+   - **Directory groups:**
+     - `README.md`: 1 file
+     - `buggy_dataset`: 3 pickle tables (`bugfixes_train.pickle`, `bugfixes_valid.pickle`, `bugfixes_test.pickle`)
+     - `buggy_dataset/buggy_snippets_files`: 47,160 Python snippet files
+     - `stable_dataset`: 5 files (`stable_code_train.pickle`, `stable_code_valid.pickle`, `stable_code_test.pickle`, and dataset descriptors)
+   - **Pickle Security Policy:** All 6 `.pickle` tables (`deserialized: false`) were kept strictly opaque. No deserialization (`pickle.load`, `pandas.read_pickle`, or `joblib`) was performed.
+   - **Python Snippet Syntax Inspection:** Sample Python snippets (e.g. `0003b2ea39ce27962210ab8b507d97ca8224706fc8b7a4b835fafcca39cfeb6f_before_merge.py` and `_after_merge.py`) were inspected strictly via `ast.parse` in text mode. Both confirmed function/method definitions present (`function_or_method_definition_present: true`, `syntax_check: "parsed_as_text_only"`). No benchmark/snippet code was imported, executed, or extracted to disk.
+
+3. **Manifest and Catalog Updates:**
+   - Manifest `data/manifests/python_pytracebugs_89a09db9add3.json` has been updated and validated with 5 artifacts:
+     - `README.md` (4,684 bytes, SHA-256: `b245e64c9b0689203a393fdf9924cb14f8e2585b3f218a8ab375572e6e7cacac`)
+     - `LICENSE` (1,066 bytes, SHA-256: `310300bff55e18942fa0d94c92588fd88a2a5583275e53f698253bd31f002bdd`)
+     - `pytracebugs_dataset_v1.rar` (1,960,844,036 bytes, SHA-256: `86071947daa9ec2a38a6e6af0d7f2da78fcc407e8fa12009930099de1b9fcd20`, Archival SHA-1: `8d60bf51e17300ac2567a4a51f48ed4eeba8d8c6`)
+     - `archive-capture.json` (246 bytes, SHA-256: `cb9ac0586fd1db33064acbb5c9213006ccd8d0c7c5e63a0acd5e20253c46c372`)
+     - `author-paper.tex` (61,307 bytes, SHA-256: `873f38567ae06eec76d204c03d8a75e862e85e33b41d5750785ec9a26653a482`)
+   - `acquisition_status` is updated to `ACQUIRED` (blocker: `None`).
+   - Catalog in `backend/app/dataset_sources.py` records source URLs, bounds, and SHA-1 matching the preservation evidence.
+
+4. **License and Usage Boundaries:**
+   - Repository license is MIT (`LICENSE` file pinned to commit `89a09db9add3ec174e3828b83e1792c6fc6ad5d2`).
+   - Underlying code snippets and dataset archive require separate license review. Archival access grants no additional redistribution rights.
+   - The recovery does not validate pickle table contents, establish Phase 3 feature compatibility, create labels/splits, or authorize starting Phase 4B.

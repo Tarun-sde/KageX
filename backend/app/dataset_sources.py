@@ -6,6 +6,15 @@ from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
+PYTRACE_ORIGINAL = (
+    "https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/"
+    "pytracebugs_dataset_v1.rar"
+)
+PYTRACE_CAPTURE = "20230808125225"
+PYTRACE_ARCHIVE = f"https://web.archive.org/web/{PYTRACE_CAPTURE}id_/{PYTRACE_ORIGINAL}"
+PYTRACE_ARCHIVE_BYTES = 1960844036
+PYTRACE_CDX_SHA1 = "8d60bf51e17300ac2567a4a51f48ed4eeba8d8c6"
+
 
 class Source(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -13,6 +22,7 @@ class Source(BaseModel):
     url: str
     extract_zip: bool = False
     upstream_md5: str | None = None
+    upstream_sha1: str | None = None
 
     @field_validator("filename")
     @classmethod
@@ -38,6 +48,7 @@ class Source(BaseModel):
                 "codeload.github.com",
                 "raw.githubusercontent.com",
                 "api.github.com",
+                "web.archive.org",
             }
             or url.username
             or url.password
@@ -210,38 +221,57 @@ def sources() -> dict[str, Dataset]:
             dataset_id=f"python_pytracebugs_{PYTRACEBUGS[:12]}",
             canonical_name="PyTraceBugs",
             language="python",
-            source_type="official_repository_metadata",
+            source_type="official_repository_and_archival_preservation",
             upstream="https://github.com/acheshkov/pytracebugs",
             version=PYTRACEBUGS,
             license="MIT",
             license_scope=(
-                "Repository LICENSE only; unavailable external artifact/underlying "
-                "snippets require separate review."
+                "Repository LICENSE only; archived dataset and underlying snippets "
+                "require separate license review. Archival access grants no new rights."
             ),
             reference="https://doi.org/10.1109/APSEC53868.2021.00022",
             granularity=(
-                "function/method snippets (upstream documentation; data unavailable)"
+                "function/method snippets; archive structure and bounded inert "
+                "samples audited"
             ),
             label_semantics=(
-                "Upstream describes buggy and stable snippet collections; not "
-                "measured or recreated here."
+                "Upstream buggy/stable collections with existing train/validation/test "
+                "partitions. Pickle tables remain opaque; labels are not recreated."
             ),
             scope=(
-                "Pinned README/LICENSE only; external v1 RAR is unavailable. No "
-                "pickle deserialization."
-            ),
-            acquisition_status="PARTIAL_METADATA",
-            blocker=(
-                "Official "
-                "https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar"
-                " returned HTTP 404 during this audit. Request a restored versioned "
-                "artifact and checksums from the authors through the official "
-                "repository; request CSV/JSON and inert source rather than loading "
-                "pickle. No substitute mirror is authorized."
+                "Pinned README/LICENSE and author paper source; full original v1 RAR "
+                "preserved by Internet Archive at 20230808125225 plus CDX evidence. "
+                "Original host returns HTTP 404 NoSuchBucket. Archive size, RAR5 "
+                "signature, archival SHA-1, local SHA-256 and inert structure checked. "
+                "No pickle deserialization or model work."
             ),
             sources=[
                 github_file("acheshkov/pytracebugs", PYTRACEBUGS, path)
                 for path in ["README.md", "LICENSE"]
+            ]
+            + [
+                Source(
+                    filename="pytracebugs_dataset_v1.rar",
+                    url=PYTRACE_ARCHIVE,
+                    upstream_sha1=PYTRACE_CDX_SHA1,
+                ),
+                Source(
+                    filename="archive-capture.json",
+                    url=(
+                        "https://web.archive.org/cdx/search/cdx?url="
+                        f"{PYTRACE_ORIGINAL}&output=json&filter=timestamp:{PYTRACE_CAPTURE}"
+                        "&fl=timestamp,original,mimetype,statuscode,digest"
+                        "&filter=statuscode:200"
+                    ),
+                ),
+                Source(
+                    filename="author-paper.tex",
+                    url=(
+                        "https://raw.githubusercontent.com/acheshkov/pytracebugs_pipeline/"
+                        "51709b17217e64bee54aeca0a109183de3c73c17/"
+                        "papers/pytracebugs_paper/pytracebugs_apsec2021.tex"
+                    ),
+                ),
             ],
         ),
         Dataset(

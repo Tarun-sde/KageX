@@ -4,33 +4,56 @@
     "dataset_id": "python_pytracebugs_89a09db9add3",
     "canonical_name": "PyTraceBugs",
     "language": "python",
-    "source_type": "official_repository_metadata",
+    "source_type": "official_repository_and_archival_preservation",
     "upstream": "https://github.com/acheshkov/pytracebugs",
     "version": "89a09db9add3ec174e3828b83e1792c6fc6ad5d2",
     "license": "MIT",
-    "license_scope": "Repository LICENSE only; unavailable external artifact/underlying snippets require separate review.",
+    "license_scope": "Repository LICENSE only; archived dataset and underlying snippets require separate license review. Archival access grants no new rights.",
     "reference": "https://doi.org/10.1109/APSEC53868.2021.00022",
-    "granularity": "function/method snippets (upstream documentation; data unavailable)",
-    "label_semantics": "Upstream describes buggy and stable snippet collections; not measured or recreated here.",
-    "scope": "Pinned README/LICENSE only; external v1 RAR is unavailable. No pickle deserialization.",
-    "acquisition_status": "PARTIAL_METADATA",
-    "blocker": "Official https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar returned HTTP 404 during this audit. Request a restored versioned artifact and checksums from the authors through the official repository; request CSV/JSON and inert source rather than loading pickle. No substitute mirror is authorized.",
+    "granularity": "function/method snippets; archive structure and bounded inert samples audited",
+    "label_semantics": "Upstream buggy/stable collections with existing train/validation/test partitions. Pickle tables remain opaque; labels are not recreated.",
+    "scope": "Pinned README/LICENSE and author paper source; full original v1 RAR preserved by Internet Archive at 20230808125225 plus CDX evidence. Original host returns HTTP 404 NoSuchBucket. Archive size, RAR5 signature, archival SHA-1, local SHA-256 and inert structure checked. No pickle deserialization or model work.",
+    "acquisition_status": "ACQUIRED",
+    "blocker": null,
     "sources": [
       {
         "filename": "README.md",
         "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/README.md",
         "extract_zip": false,
-        "upstream_md5": null
+        "upstream_md5": null,
+        "upstream_sha1": null
       },
       {
         "filename": "LICENSE",
         "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/LICENSE",
         "extract_zip": false,
-        "upstream_md5": null
+        "upstream_md5": null,
+        "upstream_sha1": null
+      },
+      {
+        "filename": "pytracebugs_dataset_v1.rar",
+        "url": "https://web.archive.org/web/20230808125225id_/https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar",
+        "extract_zip": false,
+        "upstream_md5": null,
+        "upstream_sha1": "8d60bf51e17300ac2567a4a51f48ed4eeba8d8c6"
+      },
+      {
+        "filename": "archive-capture.json",
+        "url": "https://web.archive.org/cdx/search/cdx?url=https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar&output=json&filter=timestamp:20230808125225&fl=timestamp,original,mimetype,statuscode,digest&filter=statuscode:200",
+        "extract_zip": false,
+        "upstream_md5": null,
+        "upstream_sha1": null
+      },
+      {
+        "filename": "author-paper.tex",
+        "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs_pipeline/51709b17217e64bee54aeca0a109183de3c73c17/papers/pytracebugs_paper/pytracebugs_apsec2021.tex",
+        "extract_zip": false,
+        "upstream_md5": null,
+        "upstream_sha1": null
       }
     ]
   },
-  "acquired_at": "2026-10-04T08:05:52.590849Z",
+  "acquired_at": "2026-10-04T09:23:51.245638Z",
   "checksum_provenance": "SHA-256 measured on initial approved-source acquisition; GitHub URLs pin commits where possible. Zenodo CSV MD5 additionally verified against archival metadata. Subsequent acquisition must match this manifest exactly.",
   "artifacts": [
     {
@@ -38,6 +61,7 @@
       "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/README.md",
       "extract_zip": false,
       "upstream_md5": null,
+      "upstream_sha1": null,
       "sha256": "b245e64c9b0689203a393fdf9924cb14f8e2585b3f218a8ab375572e6e7cacac",
       "size_bytes": 4684
     },
@@ -46,16 +70,112 @@
       "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/LICENSE",
       "extract_zip": false,
       "upstream_md5": null,
+      "upstream_sha1": null,
       "sha256": "310300bff55e18942fa0d94c92588fd88a2a5583275e53f698253bd31f002bdd",
       "size_bytes": 1066
+    },
+    {
+      "filename": "pytracebugs_dataset_v1.rar",
+      "url": "https://web.archive.org/web/20230808125225id_/https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "upstream_sha1": "8d60bf51e17300ac2567a4a51f48ed4eeba8d8c6",
+      "sha256": "86071947daa9ec2a38a6e6af0d7f2da78fcc407e8fa12009930099de1b9fcd20",
+      "size_bytes": 1960844036
+    },
+    {
+      "filename": "archive-capture.json",
+      "url": "https://web.archive.org/cdx/search/cdx?url=https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar&output=json&filter=timestamp:20230808125225&fl=timestamp,original,mimetype,statuscode,digest&filter=statuscode:200",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "upstream_sha1": null,
+      "sha256": "cb9ac0586fd1db33064acbb5c9213006ccd8d0c7c5e63a0acd5e20253c46c372",
+      "size_bytes": 246
+    },
+    {
+      "filename": "author-paper.tex",
+      "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs_pipeline/51709b17217e64bee54aeca0a109183de3c73c17/papers/pytracebugs_paper/pytracebugs_apsec2021.tex",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "upstream_sha1": null,
+      "sha256": "873f38567ae06eec76d204c03d8a75e862e85e33b41d5750785ec9a26653a482",
+      "size_bytes": 61307
     }
   ],
   "extracted_files": {},
   "profile": {
+    "archive_provenance": {
+      "original_url": "https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar",
+      "replacement_url": "https://web.archive.org/web/20230808125225id_/https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar",
+      "capture_timestamp_utc": "20230808125225",
+      "archival_payload_sha1": "8d60bf51e17300ac2567a4a51f48ed4eeba8d8c6",
+      "original_host_status": "HTTP 404 application/xml NoSuchBucket",
+      "preservation_evidence": "archive-capture.json; exact official URL, HTTP 200 RAR capture, independently checked payload digest"
+    },
+    "archive_format": "RAR5",
+    "inventory_tool": "libarchive 3.8.7",
+    "entries": 47172,
+    "files": 47169,
+    "directories": 3,
+    "declared_uncompressed_bytes": 4777703344,
+    "files_by_directory_group": {
+      "README.md": 1,
+      "buggy_dataset": 3,
+      "buggy_dataset/buggy_snippets_files": 47160,
+      "stable_dataset": 5
+    },
+    "opaque_pickle_tables": [
+      {
+        "path": "buggy_dataset/bugfixes_test.pickle",
+        "size_bytes": 1055223,
+        "deserialized": false
+      },
+      {
+        "path": "buggy_dataset/bugfixes_train.pickle",
+        "size_bytes": 641483588,
+        "deserialized": false
+      },
+      {
+        "path": "buggy_dataset/bugfixes_valid.pickle",
+        "size_bytes": 449638231,
+        "deserialized": false
+      },
+      {
+        "path": "stable_dataset/stable_code_test.pickle",
+        "size_bytes": 280403,
+        "deserialized": false
+      },
+      {
+        "path": "stable_dataset/stable_code_train.pickle",
+        "size_bytes": 1070397721,
+        "deserialized": false
+      },
+      {
+        "path": "stable_dataset/stable_code_valid.pickle",
+        "size_bytes": 1109414894,
+        "deserialized": false
+      }
+    ],
+    "inert_python_samples": {
+      "buggy_dataset/buggy_snippets_files/after_merge.py": {
+        "path": "buggy_dataset/buggy_snippets_files/0003b2ea39ce27962210ab8b507d97ca8224706fc8b7a4b835fafcca39cfeb6f_after_merge.py",
+        "size_bytes": 1766,
+        "sha256": "cd001f645f504991a2bb8a1dd5bed4eba8885399ac95618fcc164cb72dc4dd05",
+        "function_or_method_definition_present": true,
+        "syntax_check": "parsed_as_text_only"
+      },
+      "buggy_dataset/buggy_snippets_files/before_merge.py": {
+        "path": "buggy_dataset/buggy_snippets_files/0003b2ea39ce27962210ab8b507d97ca8224706fc8b7a4b835fafcca39cfeb6f_before_merge.py",
+        "size_bytes": 1841,
+        "sha256": "0003b2ea39ce27962210ab8b507d97ca8224706fc8b7a4b835fafcca39cfeb6f",
+        "function_or_method_definition_present": true,
+        "syntax_check": "parsed_as_text_only"
+      }
+    },
     "records": null,
     "missingness": null,
     "duplicates": null,
     "class_balance": null,
-    "reason": "External PyTraceBugs artifact returned HTTP 404. Only upstream README and LICENSE were acquired; descriptions are not measured dataset findings."
+    "limitation": "File counts are not supervised row counts. Pickle tables were not deserialized; labels, table contents and the full source population remain unvalidated. No archive contents were written to disk."
   }
 }

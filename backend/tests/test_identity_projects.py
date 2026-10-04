@@ -12,7 +12,7 @@ from app.api.auth import password_hasher
 from app.core.config import Settings
 from app.core.security import cookie_name, token_hash
 from app.models import AuthSession, Project, User, now
-from tests.conftest import HEADERS, PASSWORD, project, register
+from tests.conftest import ALEMBIC_INI, HEADERS, PASSWORD, project, register
 
 
 def test_auth_lifecycle(client: TestClient, engine: Engine) -> None:
@@ -190,7 +190,7 @@ def test_project_lock_conflict(client: TestClient, engine: Engine) -> None:
 
 
 def test_migration_roundtrip(engine: Engine) -> None:
-    config = Config("alembic.ini")
+    config = Config(str(ALEMBIC_INI))
     with engine.begin() as connection:
         config.attributes["connection"] = connection
         command.check(config)

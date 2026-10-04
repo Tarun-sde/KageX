@@ -10,7 +10,14 @@ import pytest
 from pydantic import ValidationError
 
 from app.dataset_audit import bugsinpy_profile, bugsjs_profile, csv_profile
-from app.dataset_sources import BUGSINPY, Dataset, Source, sources
+from app.dataset_sources import (
+    BUGSINPY,
+    PYTRACE_ARCHIVE,
+    PYTRACE_ARCHIVE_BYTES,
+    Dataset,
+    Source,
+    sources,
+)
 from app.datasets import (
     DATA,
     MAX_BYTES,
@@ -78,11 +85,15 @@ def test_acquisition_manifest_and_existing_offline_detection(
     assert (root / "fixture.csv").read_bytes() == b"corrupt"
 
 
-@pytest.mark.parametrize("kind", ["checksum", "incomplete", "oversized"])
+@pytest.mark.parametrize(
+    "kind", ["checksum", "archival_sha1", "incomplete", "oversized"]
+)
 def test_bad_downloads_are_not_published(
     kind: str, catalog: Dataset, monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     source = catalog.sources[0]
+    if kind == "archival_sha1":
+        source = source.model_copy(update={"upstream_sha1": "0" * 40})
     expected = Artifact(**source.model_dump(), sha256="0" * 64, size_bytes=len(CSV))
     length = (
         len(CSV) + 1
@@ -105,6 +116,34 @@ def test_existing_download_never_deleted(
     with pytest.raises(FileExistsError):
         download(catalog.sources[0], target, None)
     assert target.read_bytes() == b"preserve"
+
+
+def test_pytrace_xml_error_is_never_an_archive(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    response(monkeypatch, b"<?xml version='1.0'?><Error>NoSuchBucket</Error>")
+    target = tmp_path / "pytracebugs_dataset_v1.rar"
+    source = Source(filename=target.name, url=PYTRACE_ARCHIVE)
+    with pytest.raises(ValueError, match="Expected RAR5"):
+        download(source, target, None)
+    assert not target.exists()
+
+
+def test_large_archive_exception_is_limited_to_pinned_pytrace_capture() -> None:
+    with pytest.raises(ValidationError, match="approved source size"):
+        Artifact(
+            filename="other.rar",
+            url="https://zenodo.org/other.rar",
+            sha256="0" * 64,
+            size_bytes=MAX_BYTES + 1,
+        )
+    artifact = Artifact(
+        filename="pytracebugs_dataset_v1.rar",
+        url=PYTRACE_ARCHIVE,
+        sha256="0" * 64,
+        size_bytes=PYTRACE_ARCHIVE_BYTES,
+    )
+    assert artifact.size_bytes == PYTRACE_ARCHIVE_BYTES
 
 
 @pytest.mark.parametrize(
@@ -175,6 +214,26 @@ def test_all_tracked_manifests_validate_without_network() -> None:
         manifest = read_manifest(path)
         assert manifest.acquired_at.tzinfo is not None
         assert manifest.artifacts
+
+
+def test_pytracebugs_manifest_and_profile_contents() -> None:
+    manifest = read_manifest(
+        DATA / "manifests" / "python_pytracebugs_89a09db9add3.json"
+    )
+    assert manifest.dataset.canonical_name == "PyTraceBugs"
+    assert manifest.dataset.acquisition_status == "ACQUIRED"
+    assert manifest.dataset.blocker is None
+    assert len(manifest.artifacts) == 5
+    assert {a.filename for a in manifest.artifacts} == {
+        "README.md",
+        "LICENSE",
+        "pytracebugs_dataset_v1.rar",
+        "archive-capture.json",
+        "author-paper.tex",
+    }
+    assert manifest.profile.get("archive_format") == "RAR5"
+    assert manifest.profile.get("entries") == 47172
+    assert manifest.profile.get("files") == 47169
 
 
 def test_bug_metadata_remains_inert_and_abbreviations_are_not_full_pins(
