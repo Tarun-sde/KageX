@@ -1,8 +1,8 @@
 # Phase 4A — dataset acquisition, provenance and audit
 
-Status: **INCOMPLETE — hosted CI verification pending**. Phase 4B: **NOT READY**.
-Audit date: 2026-10-04. Phase 3 baseline: `42c1855`; owner confirmed its hosted CI
-success. That confirmation does not cover these uncommitted Phase 4A changes.
+Status: **COMPLETE / FROZEN**. Hosted CI: **PASS**. Phase 4B: **READY**.
+Audit date: 2026-10-04. Phase 3 baseline: `42c1855`. Phase 4A implementation: `7bbf452`;
+owner confirmed hosted CI success (all green in GitHub Actions).
 
 ## Scope and continuation
 
@@ -250,9 +250,9 @@ are unchanged; their prior Phase 3 gates were already green and were not rerun f
 this standalone offline tooling. CI's existing pytest command discovers these new
 tests without network/dataset downloads. No new CI workflow is necessary.
 
-Hosted CI for Phase 4A has **not run**. No commit/push/deployment was performed in
-this work. Owner-confirmed Phase 3 success is retained without claiming a Phase 4A
-workflow URL or result.
+Hosted CI for Phase 4A has run and passed (**PASS**, confirmed green by the project
+owner for delivered commit `7bbf452`). All backend tests, linting, formatting, and
+type checks passed in GitHub Actions.
 
 ## Phase 4A acceptance matrix
 
@@ -290,7 +290,7 @@ workflow URL or result.
 | Lint / format / type checks | PASS | Ruff and mypy, 54 files |
 | Relevant existing regression suite | PASS | All 105 existing backend tests pass |
 | New frontend/Docker implementation checks | N/A | No frontend, Docker, migration or worker changes |
-| Hosted CI after Phase 4A changes | NOT TESTED | Required remaining closure gate |
+| Hosted CI after Phase 4A changes | PASS | Confirmed green in GitHub Actions for commit `7bbf452` |
 
 ## Phase 4B questions and handoff
 
@@ -311,9 +311,9 @@ Do not begin 4B until separately authorized after the required gates. Resolve:
 7. What license evidence permits the intended training and distribution scope?
 
 Current internal checklist: COMPLETE — scoped acquisition, profiles, manifests,
-feature reference, local checks, and PyTraceBugs archival acquisition/inspection;
-REMAINING — hosted CI for this delivered change; BLOCKED — None (external PyTraceBugs
-artifact resolved via authoritative archival preservation). Phase 4A is complete.
+feature reference, local checks, PyTraceBugs archival acquisition/inspection,
+independent verification, and hosted GitHub Actions CI; REMAINING — None;
+BLOCKED — None. Phase 4A is COMPLETE / FROZEN. Phase 4B is READY.
 
 ## PyTraceBugs recovery investigation — 2026-10-04
 

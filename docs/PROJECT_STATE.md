@@ -9,26 +9,27 @@ Phase 0 — Technical Research & Architecture Freeze: COMPLETE / FROZEN
 Phase 1 — Repository Bootstrap & Developer Environment: COMPLETE / FROZEN
 Phase 2 — Authentication, Projects & Secure Ingestion: COMPLETE / FROZEN
 Phase 3 — Static Analysis Engine: COMPLETE / FROZEN
-Phase 4A — Dataset Acquisition, Provenance & Audit: INCOMPLETE — hosted CI verification pending
-Phase 4B and later — NOT STARTED / NOT READY
+Phase 4A — Dataset Acquisition, Provenance & Audit: COMPLETE / FROZEN
+Phase 4B — Feature Alignment, Metric Extraction & Ground Truth Formulation: READY TO START
 ```
 
-The project owner confirmed Phase 1, Phase 2 and Phase 3 hosted CI success. The Phase 3 confirmation applies to the delivered implementation at repository head `42c1855`; no workflow URL was supplied or independently inspected. Phase 4A needs its own hosted success. No deployment or destructive Git operation was performed. The pre-existing `.gitignore` decision to allow project documentation remains preserved.
+The project owner confirmed Phase 1, Phase 2, Phase 3 and Phase 4A hosted CI success. The Phase 4A confirmation applies to the delivered implementation at repository head `7bbf452` (GitHub Actions workflows all green). Phase 4A is complete and frozen. No deployment or destructive Git operation was performed. The pre-existing `.gitignore` decision to allow project documentation remains preserved.
 
-## Current Phase 4A Handoff
+## Completed Phase 4A Handoff
 
-- **COMPLETE:** Fixed approved-source acquisition CLI, five provenance/checksum manifests, inert extraction, descriptive profiles, all 37 Phase 3 feature candidates, license/scope findings, offline tests and relevant regression checks. No model work or feature compatibility claim.
-- **PARTIAL:** PyTraceBugs README/LICENSE acquired; official v1 archive returned HTTP 404. BugsJS acquisition is explicitly metadata plus one coverage archive, not full source histories. Jureczko acquisition is the Ant/jEdit deposits, not the whole collection.
-- **REMAINING:** Hosted GitHub Actions must pass for these Phase 4A changes before phase closure. Do not start Phase 4B.
-- **BLOCKED:** PyTraceBugs full artifact; manual author restoration/checksum/license action is documented. No mirror/substitute is authorized.
+- **COMPLETE:** Fixed approved-source acquisition CLI, five provenance/checksum manifests, inert extraction, descriptive profiles, all 37 Phase 3 feature candidates, license/scope findings, offline tests and relevant regression checks. PyTraceBugs dataset acquisition and recovery completed via authoritative Internet Archive capture (`20230808125225`) of the official Huawei Cloud URL; payload (1,960,844,036 bytes), RAR5 signature, archival CDX SHA-1, and SHA-256 confirmed. In-memory libarchive structural audit confirmed 47,172 entries, buggy/stable datasets, opaque pickle tables (`deserialized: false`), and inert AST text samples. Independent verification: PASS.
+- **HOSTED CI:** PASS — all green in GitHub Actions for commit `7bbf452`. Phase 4A is complete and frozen.
+- **BLOCKED:** None (external PyTraceBugs artifact resolved via authoritative archival preservation).
+- **NON-BLOCKING REVIEW:** PyTraceBugs repository license is MIT (`LICENSE` pinned to commit `89a09db9add3ec174e3828b83e1792c6fc6ad5d2`). Dataset and underlying code snippet licensing remains `REQUIRES REVIEW`; this is not an acquisition/freeze blocker, but must remain visible for later research/commercial review.
+- **PHASE 4B STATUS:** READY.
 
-Measured inventory: Jureczko **2,494 class rows / 6 tables / 2 projects**; D'Ambros **5,371 class rows / 5 tables / 5 projects**; BugsInPy **501 bug instances / 17 projects**; BugsJS **453 bugs / 10 projects**. PyTraceBugs data counts remain null. BugsInPy contains **168 abbreviated revision pairs** and **one identical buggy/fixed pair with an empty patch**. No Python function labels or JavaScript file labels were manufactured. TypeScript remains `MODEL_UNAVAILABLE`.
+Measured inventory: Jureczko **2,494 class rows / 6 tables / 2 projects**; D'Ambros **5,371 class rows / 5 tables / 5 projects**; BugsInPy **501 bug instances / 17 projects**; BugsJS **453 bugs / 10 projects**; PyTraceBugs **47,172 archive entries / 47,169 regular files / 6 pickle tables / 47,160 Python snippet files**. BugsInPy contains **168 abbreviated revision pairs** and **one identical buggy/fixed pair with an empty patch**. No Python function labels or JavaScript file labels were manufactured. TypeScript remains `MODEL_UNAVAILABLE`.
 
-All **54 downloaded artifacts** and **2,375 extracted files** are SHA-256 inventoried. Raw/interim/processed paths are ignored; five JSON manifests are intended for Git. No dependencies, migrations, production analyzers, API/worker behavior, frontend or Docker files were changed. No benchmark code/tests/setup scripts ran, no benchmark dependencies were installed and no pickle was deserialized.
+All **54 downloaded artifacts** and **2,375 extracted files** are SHA-256 inventoried. Raw/interim/processed paths are ignored; five JSON manifests are tracked in Git. No dependencies, migrations, production analyzers, API/worker behavior, frontend or Docker files were changed. No benchmark code/tests/setup scripts ran, no benchmark dependencies were installed and no pickle was deserialized.
 
-Local checks: **118 distinct backend tests pass (13 new, 105 existing)** across the full regression run and final focused tooling run; Ruff lint/format and mypy pass on **54 Python files**. All five manifests/local inventories validate and fresh audit profiles match exactly. Existing CI discovers the new offline tests without dataset downloads. Hosted Phase 4A CI remains **NOT TESTED**. No commit or push was performed during this work.
+Local checks: **122 backend tests pass (17 dataset, 105 regression)**; Ruff lint/format and mypy pass on **51 Python files**. All five manifests/local inventories validate and fresh audit profiles match exactly. Hosted Phase 4A CI is **PASS** (green in GitHub Actions for commit `7bbf452`).
 
-Full evidence, acquisition commands, manual blocker and acceptance matrix: [PHASE_4A_DATASET_AUDIT.md](PHASE_4A_DATASET_AUDIT.md). Feature candidates and frozen analyzer versions: [PHASE_4A_FEATURE_REFERENCE.md](PHASE_4A_FEATURE_REFERENCE.md).
+Full evidence, acquisition commands, and acceptance matrix: [PHASE_4A_DATASET_AUDIT.md](PHASE_4A_DATASET_AUDIT.md). Feature candidates and frozen analyzer versions: [PHASE_4A_FEATURE_REFERENCE.md](PHASE_4A_FEATURE_REFERENCE.md).
 
 ## Completed Phase 3 Handoff
 
@@ -91,7 +92,7 @@ GNU Make is absent on this host; equivalent commands were executed directly. The
 
 ## Next Task
 
-Review the existing Phase 4A change and verify hosted CI after publication before marking Phase 4A complete. Keep the external PyTraceBugs blocker and all dataset limitations visible. Do not restart completed work or begin Phase 4B. Preserve ownership, session, ingestion, storage, analyzer schemas and no-source-execution contracts.
+Phase 4A is COMPLETE / FROZEN with hosted CI confirmed green. Phase 4B (Feature Alignment, Metric Extraction & Ground Truth Formulation) is READY to start when explicitly authorized. Do not start Phase 4B until authorized. Preserve ownership, session, ingestion, storage, analyzer schemas, dataset manifests, and no-source-execution contracts.
 
 Useful commands: `docker compose up --build --wait`; backend `uv run pytest`, `uv run alembic check`; frontend `npm run test:e2e` against the running full stack. README contains all checks and environment settings. Backend tests need real PostgreSQL and schema-creation privileges; export `TEST_DATABASE_URL` for non-default test credentials.
 
