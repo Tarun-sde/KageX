@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --color-canvas: #111111;
+  --color-surface: #191a19;
+  --color-foreground: #f6f5f2;
+  --color-muted: #b5b5ad;
+  --color-accent: #ff8a5c;
+  --color-line: #383935;
+  --radius-panel: 1rem;
+  --shadow-panel:
+    inset 0 1px 0 rgb(255 255 255 / 5%), 0 20px 60px rgb(0 0 0 / 15%);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  body {
+    @apply m-0 bg-canvas font-sans text-foreground antialiased;
+    background-image: radial-gradient(
+      ellipse at 85% 15%,
+      #27221d 0,
+      transparent 48%
+    );
+  }
+  a,
+  button {
+    @apply transition-colors duration-150;
+  }
+  a:hover,
+  nav a[aria-current='page'] {
+    @apply text-accent;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 5px;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+  ::selection {
+    background: #ff5a24;
+    color: #111111;
+  }
+}
+
+@layer components {
+  .container-shell {
+    @apply mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16;
+  }
+  .panel {
+    @apply rounded-panel border border-line bg-surface shadow-panel;
+  }
+  .eyebrow {
+    @apply flex items-center gap-3 text-xs font-medium uppercase tracking-widest text-muted;
+  }
+  .button {
+    @apply inline-flex min-h-12 items-center justify-center gap-6 rounded-lg border border-line px-6 py-3 text-sm font-medium;
+  }
+  .button:hover {
+    @apply border-accent text-accent;
+  }
+  .button-primary {
+    background: #ff5a24;
+    color: #111111;
+    border-color: #ff5a24;
+  }
+  .button-primary:hover {
+    background: #ff8a5c;
+    color: #111111;
+  }
+  .status-dot {
+    @apply inline-block size-2 shrink-0 bg-accent;
+  }
+  .status-dot.is-ready {
+    background: #a4d4a5;
+  }
+  .skip-link {
+    @apply fixed left-4 top-4 z-50 -translate-y-24 bg-foreground p-3 text-canvas focus:translate-y-0;
+  }
+  .signal-field {
+    display: grid;
+    place-items: center;
+    height: 12rem;
+    background-image:
+      linear-gradient(#38393555 1px, transparent 1px),
+      linear-gradient(90deg, #38393555 1px, transparent 1px);
+    background-size: 2rem 2rem;
+  }
+  .signal-field span {
+    grid-area: 1 / 1;
+    border: 1px solid var(--color-line);
+    border-radius: 50%;
+    width: 11rem;
+    height: 11rem;
+  }
+  .signal-field span:nth-child(2) {
+    width: 7rem;
+    height: 7rem;
+    border-color: #ff5a2466;
+  }
+  .signal-field span:nth-child(3) {
+    width: 2rem;
+    height: 2rem;
+    background: #ff5a24;
+    border: 0;
+    box-shadow: 0 0 40px #ff5a2422;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,1 @@
+"""KageX core foundation."""
