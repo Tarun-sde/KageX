@@ -203,6 +203,8 @@ def test_migration_roundtrip(engine: Engine) -> None:
             "users",
             "auth_sessions",
             "projects",
+            "analysis_runs",
+            "analysis_entities",
         }
 
 

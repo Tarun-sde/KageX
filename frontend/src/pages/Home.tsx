@@ -18,9 +18,8 @@ export function Home() {
             AI-Powered Software Defect Prediction &amp; Code Risk Analysis
           </p>
           <p className="mt-4 max-w-lg leading-relaxed text-muted">
-            A clearer view of code risk, built on static analysis and
-            language-specific models. The foundation is here. Analysis comes
-            next.
+            Inspect real static metrics for Java, Python, JavaScript, and
+            TypeScript. Validated defect prediction remains future work.
           </p>
           <Link to="/app" className="button button-primary mt-9">
             Open workspace <span aria-hidden="true">↗</span>
@@ -35,11 +34,11 @@ export function Home() {
           </div>
           <h2 className="font-display text-3xl">Built for a closer look.</h2>
           <p className="mt-4 leading-relaxed text-muted">
-            Source stays source. Future analysis will inspect code without
-            executing it.
+            Source stays source. Static analysis inspects code without executing
+            it.
           </p>
           <p className="mt-8 border-t border-line pt-5 text-sm text-accent">
-            Application shell ready
+            Static analysis available
           </p>
         </div>
       </section>
@@ -57,8 +56,7 @@ export function Home() {
         <Panel title="Evidence before prediction.">
           <p className="leading-relaxed text-muted">
             No invented scores. No silent model substitutions. TypeScript
-            prediction remains unavailable in the baseline; static analysis is
-            planned.
+            prediction remains MODEL_UNAVAILABLE; static metrics are available.
           </p>
         </Panel>
       </section>

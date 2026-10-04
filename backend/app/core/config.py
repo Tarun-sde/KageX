@@ -35,6 +35,17 @@ class Settings(BaseSettings):
     max_file_size_mb: int = Field(default=10, ge=1, le=100)
     max_compression_ratio: int = Field(default=100, ge=1, le=1000)
     ingestion_timeout_seconds: int = Field(default=30, ge=1, le=120)
+    analysis_timeout_seconds: int = Field(default=120, ge=5, le=600)
+    analysis_queue_timeout_seconds: int = Field(default=600, ge=30, le=3600)
+    analyzer_timeout_seconds: int = Field(default=45, ge=1, le=120)
+    max_analysis_file_bytes: int = Field(default=524288, ge=1024, le=10485760)
+    max_analysis_entities: int = Field(default=10000, ge=1, le=50000)
+    max_analyzer_output_bytes: int = Field(default=8388608, ge=1024, le=33554432)
+    analyzer_tools_root: Path = (
+        Path(__file__).resolve().parents[1] / "analyzers" / "tools"
+    )
+    analyzer_java: Path = Path("/usr/bin/java")
+    analyzer_node: Path = Path("/usr/bin/node")
 
     @model_validator(mode="after")
     def production_safety(self) -> Settings:

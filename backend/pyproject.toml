@@ -16,6 +16,7 @@ dependencies = [
   "argon2-cffi>=25,<26",
   "email-validator>=2,<3",
   "httpx2>=2.13,<3",
+  "radon==6.0.1",
 ]
 
 [dependency-groups]
@@ -43,6 +44,10 @@ select = ["E", "F", "I", "UP", "B"]
 python_version = "3.14"
 strict = true
 plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["radon", "radon.*"]
+ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

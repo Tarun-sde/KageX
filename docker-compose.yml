@@ -14,6 +14,12 @@ x-backend-environment: &backend-environment
   MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB:-10}
   MAX_COMPRESSION_RATIO: ${MAX_COMPRESSION_RATIO:-100}
   INGESTION_TIMEOUT_SECONDS: ${INGESTION_TIMEOUT_SECONDS:-30}
+  ANALYSIS_TIMEOUT_SECONDS: ${ANALYSIS_TIMEOUT_SECONDS:-120}
+  ANALYZER_TIMEOUT_SECONDS: ${ANALYZER_TIMEOUT_SECONDS:-45}
+  ANALYSIS_QUEUE_TIMEOUT_SECONDS: ${ANALYSIS_QUEUE_TIMEOUT_SECONDS:-600}
+  MAX_ANALYSIS_FILE_BYTES: ${MAX_ANALYSIS_FILE_BYTES:-524288}
+  MAX_ANALYSIS_ENTITIES: ${MAX_ANALYSIS_ENTITIES:-10000}
+  MAX_ANALYZER_OUTPUT_BYTES: ${MAX_ANALYZER_OUTPUT_BYTES:-8388608}
   LOG_LEVEL: ${LOG_LEVEL:-INFO}
   DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-kagex}:${POSTGRES_PASSWORD:-kagex_dev_only}@postgres:5432/${POSTGRES_DB:-kagex}
   REDIS_URL: redis://redis:6379/0
@@ -43,13 +49,13 @@ services:
       timeout: 3s
       retries: 10
   migrate:
-    build: ./backend
+    build: { context: ./backend, target: api }
     environment: *backend-environment
     command: ["alembic", "upgrade", "head"]
     depends_on:
       postgres: { condition: service_healthy }
   backend:
-    build: ./backend
+    build: { context: ./backend, target: api }
     environment: *backend-environment
     ports: ["127.0.0.1:${BACKEND_PORT:-8000}:8000"]
     volumes: ["./backend/app:/app/app:ro,Z", "source_data:/app/storage"]
@@ -62,8 +68,12 @@ services:
       timeout: 4s
       retries: 10
   worker:
-    build: ./backend
+    build: { context: ./backend, target: worker }
     environment: *backend-environment
+    volumes: ["source_data:/app/storage:ro"]
+    mem_limit: 2g
+    pids_limit: 128
+    tmpfs: ["/tmp:size=512m,mode=1777"]
     command: ["celery", "-A", "app.workers.celery_app:celery_app", "worker", "--loglevel=INFO", "--concurrency=1", "--hostname=worker@%h"]
     depends_on:
       migrate: { condition: service_completed_successfully }

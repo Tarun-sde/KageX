@@ -7,11 +7,27 @@
 ```text
 Phase 0 — Technical Research & Architecture Freeze: COMPLETE / FROZEN
 Phase 1 — Repository Bootstrap & Developer Environment: COMPLETE / FROZEN
-Phase 2 — Authentication, Projects & Secure Ingestion: INCOMPLETE — hosted CI verification pending
-Phase 3 — Static Analysis Engine: NOT STARTED / NOT AUTHORIZED
+Phase 2 — Authentication, Projects & Secure Ingestion: COMPLETE / FROZEN
+Phase 3 — Static Analysis Engine: INCOMPLETE — hosted CI verification pending
+Phase 4 — Dataset Pipeline & Model Training: NOT STARTED / NOT READY
 ```
 
-The project owner confirmed Phase 1 hosted CI success. Phase 2 was continued from the current partial implementation, preserving valid work. All applicable local implementation/verification gates now pass; the updated workflow has not run successfully on hosted GitHub Actions for these uncommitted changes. No commit, push, deployment, or destructive Git operation was performed. The pre-existing `.gitignore` decision to allow project documentation remains preserved.
+The project owner confirmed Phase 1 and Phase 2 hosted CI success. Phase 2 was continued from the existing partial implementation, preserving valid work, and all applicable local and hosted gates pass. No deployment or destructive Git operation was performed. The pre-existing `.gitignore` decision to allow project documentation remains preserved.
+
+## Current Phase 3 Handoff
+
+Continued the existing partial Phase 3 implementation; valid work was preserved. Local implementation includes four real analyzers, versioned metric contracts, safe discovery/tool processes, PostgreSQL runs/entities, owner-scoped APIs, asynchronous Celery lifecycle, and frontend start/history/status/metrics/warnings. No Phase 4 code was added.
+
+- **COMPLETE:** Core implementation, schema validation, analyzer correctness/security fixtures, persistence/ownership/idempotency/failure tests, frontend workflow, migration round trips, trusted worker image and CI setup.
+- **PARTIAL:** Formal Phase 3 closure requires a hosted run for the delivered revision.
+- **REMAINING:** Run hosted GitHub Actions after publishing the reviewed changes; record the exact successful run before freezing Phase 3.
+- **BLOCKED:** No hosted Phase 3 success has been observed. Phase 2's green CI does not prove Phase 3.
+
+Local backend verification: **105 tests pass**, including the 77 baseline tests, 18 analyzer/security cases and 10 lifecycle/API/migration cases; Ruff lint/format and mypy pass on 50 Python files. Frontend: **18 tests pass**, lint/format/types/build pass. Docker runs all four analyzers through real Celery/Redis/PostgreSQL; mixed fixtures persist nine entities. **Four browser tests pass**, covering successful mixed analysis and no-entity failure at 1440px and 390px. Detailed final gate evidence and all 71 acceptance criteria (70 PASS, hosted CI NOT TESTED) are in [PHASE_3_VERIFICATION.md](PHASE_3_VERIFICATION.md).
+
+Important continuation notes: CK 0.7.0 has Java 11 grammar; its artifact must remain readable by UID 10001. Python MI is measured on normalized AST source. Java bindings can be incomplete without dependencies. Distinct language schemas and full tool/runtime version metadata must remain intact. See [METRIC_SCHEMAS.md](METRIC_SCHEMAS.md) and TD-013–015. Source preparation remains Phase 2 synchronous ingestion; static analysis is asynchronous. There is no ML, prediction, risk, SHAP or recommendation implementation.
+
+Migration head is `f2de3d2ac9dd`. Compose supplies a worker-only Java/Node toolchain, read-only source mount, process/memory limits and ephemeral scratch. Normal scratch cleanup is automatic; hard crash recovery requires worker-container restart (or confirmed orphan removal with native workers stopped). Stale run deadlines are enforced lazily on reads/new-run/delete, not by a scheduler. The Compose development stack remains running. No commits, pushes or deployment have been performed.
 
 ## Completed Phase 2 Work
 
@@ -23,7 +39,7 @@ The project owner confirmed Phase 1 hosted CI success. Phase 2 was continued fro
 - Private non-root Docker source volume, expanded environment documentation, PostgreSQL CI service/migration tests, and Playwright desktop/mobile Docker E2E job.
 - README/API/security/retention instructions, AGENT operational guidance, and additive TD-009 through TD-012 decisions.
 
-## Verification Executed
+## Historical Phase 2 Verification
 
 Full evidence, security coverage, file inventory, and every acceptance criterion are in [PHASE_2_VERIFICATION.md](PHASE_2_VERIFICATION.md).
 
@@ -45,7 +61,7 @@ Full evidence, security coverage, file inventory, and every acceptance criterion
 | Native API/Vite startup | PASS — readiness at 8011, frontend at 5174; temporary native processes stopped |
 | CI YAML parsing/structure | PASS — PyYAML parsing and job/step checks; reviewed service/command wiring |
 | Source/credential audit and diff whitespace | PASS — no source execution/installation path, no probable secret-pattern matches, `.env`/`.data` ignored |
-| Hosted Phase 2 GitHub Actions | **NOT TESTED** — remaining formal gate |
+| Hosted Phase 2 GitHub Actions | **PASS** — confirmed by the project owner |
 
 GNU Make is absent on this host; equivalent commands were executed directly. The verified Compose stack remains running at localhost:5173 / localhost:8000. Browser tests leave disposable test accounts; their projects are deleted. Final staging and deletion quarantine inspection found zero entries.
 
@@ -59,9 +75,9 @@ GNU Make is absent on this host; equivalent commands were executed directly. The
 - A crash between filesystem and DB operations can require offline reconciliation. Production retention/garbage collection, authentication throttling and quotas remain deployment hardening work. See TD-011 and README for the actual limitations and recovery approach.
 - Review corrected duplicate generated enum constraints, malformed GitHub URL handling, disconnected/failed upload state, and ZIP offset ambiguity before final verification.
 
-## Remaining Gate and Next Task
+## Next Task
 
-Obtain a green hosted run of the updated `.github/workflows/ci.yml` for the delivered Phase 2 revision, then record the actual run URL/result. **Phase 2 remains incomplete and Phase 3 is NOT READY.** Do not start analyzers or ML now.
+Phase 3 local work is implemented; hosted CI is the remaining formal gate. Review/publish the existing changes and verify the hosted run before marking Phase 3 complete. Do not restart implementation or begin Phase 4. Preserve the Phase 2 ownership, session, ingestion, storage, and no-source-execution contracts.
 
 Useful commands: `docker compose up --build --wait`; backend `uv run pytest`, `uv run alembic check`; frontend `npm run test:e2e` against the running full stack. README contains all checks and environment settings. Backend tests need real PostgreSQL and schema-creation privileges; export `TEST_DATABASE_URL` for non-default test credentials.
 
@@ -154,4 +170,4 @@ Implemented:
 
 ### Historical Phase 1 Handoff
 
-Phase 1 authorized Phase 2. The current Phase 2 implementation and remaining hosted CI gate are recorded at the top of this document. The pasted continuation instructions have been incorporated into that current status and verification record.
+Phase 1 authorized Phase 2. The completed Phase 2 implementation and verification are recorded at the top of this document.

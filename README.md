@@ -10,15 +10,16 @@ KageX is a final-year project for language-specific static metrics and validated
 
 - **Phase 0: COMPLETE / FROZEN.** Architecture, datasets, granularities, and ML integrity rules remain unchanged.
 - **Phase 1: COMPLETE / FROZEN.** Hosted CI success confirmed by the project owner.
-- **Phase 2: INCOMPLETE — hosted CI verification pending.** Local implementation and verification are recorded in [PROJECT_STATE](docs/PROJECT_STATE.md) and [Phase 2 verification](docs/PHASE_2_VERIFICATION.md).
+- **Phase 2: COMPLETE.** Local verification and the hosted GitHub Actions workflow are green; evidence is recorded in [PROJECT_STATE](docs/PROJECT_STATE.md) and [Phase 2 verification](docs/PHASE_2_VERIFICATION.md).
+- **Phase 3: INCOMPLETE — hosted CI verification pending.** Static analysis is implemented; see [Phase 3 verification](docs/PHASE_3_VERIFICATION.md) and [metric contracts](docs/METRIC_SCHEMAS.md). Phase 4 has not started.
 
 ### Implemented
 
-Registration/login with expiring server sessions; protected `/app` project list and detail flows; owned project CRUD; bounded ZIP/public GitHub ingestion into private local storage; real API/dependency connection status; FastAPI liveness, readiness, and versioned status; PostgreSQL/SQLAlchemy sessions and Alembic; Redis; a Celery ping task; Docker development stack; tests, lint, formatting, strict type checks, and CI configuration.
+Registration/login with expiring server sessions; protected project CRUD; bounded ZIP/public GitHub ingestion; queued Java/Python/JavaScript/TypeScript static analysis; persisted run history, summaries, warnings and paginated versioned metrics; PostgreSQL/Alembic, Redis/Celery, Docker, tests and CI.
 
 ### Planned
 
-Analyzers, dataset pipelines, trained models, predictions, explanations, recommendations, and the full analysis dashboard. None of these features is currently available. No mock predictions or model artifacts exist.
+Dataset pipelines, trained models, predictions, explanations, recommendations, and the full analysis dashboard remain future work. No mock predictions or model artifacts exist.
 
 | Language | Planned granularity | Frozen prediction strategy |
 |---|---|---|
@@ -43,7 +44,7 @@ React / Vite → FastAPI → PostgreSQL
 | Tooling | uv 0.12.23, Ruff, mypy, pytest; ESLint, Prettier, Vitest, Testing Library, Playwright |
 | Node | Node 24 recommended; Node 22.12+ supported within major 22 |
 
-Exact dependency resolutions live in `backend/uv.lock` and `frontend/package-lock.json`. The Redis client version is constrained by Celery's supported dependencies. Tests use `httpx2`, the transport requested by the installed Starlette TestClient, rather than its deprecated `httpx` fallback. Recharts, ML, AST, and 3D packages remain deferred until used. The backend uses synchronous SQLAlchemy sessions; FastAPI runs synchronous routes/dependencies in its thread pool.
+Exact dependency resolutions live in `backend/uv.lock`, `frontend/package-lock.json`, and `backend/app/analyzers/tools/package-lock.json`. Analyzers use Radon 6.0.1, CK 0.7.0, ESLint 10.12.0 and ts-morph 28.0.0 (TypeScript parser 6.0.2). The Redis client version is constrained by Celery's supported dependencies. Tests use `httpx2`, the transport requested by the installed Starlette TestClient. Recharts, ML and 3D packages remain deferred. SQLAlchemy sessions are synchronous; FastAPI runs synchronous routes/dependencies in its thread pool.
 
 Tailwind uses its [official Vite integration](https://tailwindcss.com/docs/installation/using-vite); CSS theme tokens live in `frontend/src/styles/index.css`. The dark shell adapts the reference's orange signal motif, serif hierarchy, subtle depth, and spacing. System fonts (Georgia and system sans fallbacks) avoid external font requests. No prototype scripts or sample metrics were copied. Route sections and isolated visual components leave room for later visual work without introducing WebGL or animation dependencies.
 
@@ -79,6 +80,9 @@ cp .env.example .env
 docker compose up -d --wait postgres redis
 cd backend
 uv sync --locked
+npm ci --ignore-scripts --prefix app/analyzers/tools
+# Requires a trusted JDK 17+ with javac; compiles only KageX's wrapper.
+uv run python app/analyzers/tools/install_ck.py
 uv run alembic upgrade head
 uv run python -m app
 ```
@@ -99,6 +103,8 @@ npm run dev
 ```
 
 Python reads the root `.env` regardless of working directory. Vite also loads the root `.env`; restart Vite after changing it. Avoid running native and container frontends/APIs on the same ports simultaneously.
+
+Native analyzer workers require Linux, Java 17+ and Node 24.14.0 (tested also on Node 22.23.1). `ANALYZER_JAVA` and `ANALYZER_NODE` default to `/usr/bin/java` and `/usr/bin/node`; set absolute paths if your tools are elsewhere. Only KageX's locked dependencies are installed, never those of submitted repositories. Docker builds the wrapper and includes Java/Node tools only in the worker image. Native workers need equivalent operator-managed memory/process isolation; Compose supplies these limits.
 
 ## Environment
 
@@ -125,6 +131,12 @@ Only `.env.example` is version-controlled. `.env` is ignored. Example credential
 | `MAX_ARCHIVE_FILES` | Maximum ZIP entries including directories, default 2000 |
 | `MAX_COMPRESSION_RATIO` | Maximum expansion ratio per entry, default 100 |
 | `INGESTION_TIMEOUT_SECONDS` | Preparation deadline, default 30 seconds; network operations also limited to 5 seconds |
+| `ANALYSIS_TIMEOUT_SECONDS` | Total analysis deadline, default 120 seconds; Celery soft/hard limits add 10/20 seconds |
+| `ANALYSIS_QUEUE_TIMEOUT_SECONDS` | Queue expiry, default 600 seconds |
+| `ANALYZER_TIMEOUT_SECONDS` | Per-language tool deadline, default 45 seconds |
+| `MAX_ANALYSIS_FILE_BYTES` | Per-file parsing limit, default 524288; larger files get warnings |
+| `MAX_ANALYSIS_ENTITIES` | Maximum entities per run, default 10000 |
+| `MAX_ANALYZER_OUTPUT_BYTES` | Tool stream output limit, default 8388608 |
 | `TEST_DATABASE_URL` | Export for pytest; default disposable local PostgreSQL URL |
 | `VITE_API_BASE_URL` | Public browser API origin; blank uses same-origin requests and requires a reverse proxy |
 
@@ -136,7 +148,7 @@ Compose deliberately replaces native database/Redis/Celery URLs with service-net
 |---|---|
 | `GET /health` | Lightweight liveness: status, service, version; no dependency I/O |
 | `GET /ready` | Executes `SELECT 1` and Redis `PING`; 200 when both work, otherwise 503 with safe booleans |
-| `GET /api/v1/status` | `phase: foundation`, `analysis_available: false` |
+| `GET /api/v1/status` | `phase: static_analysis`, `analysis_available: true`; capability, not a worker health guarantee |
 
 `/health` and `/ready` are unversioned operational endpoints; application APIs use `/api/v1`. Readiness does not certify worker health or model availability. The workspace checks both endpoints on mount and on **Check again**, with bounded requests and explicit loading/unavailable states.
 
@@ -161,6 +173,21 @@ Open `/register`, create an account, then create a ZIP or GitHub project in `/ap
 | `POST /projects/{id}/source/zip` | **Raw ZIP body**, `Content-Type: application/zip`; not multipart |
 | `POST /projects/{id}/source/github` | `{url:"https://github.com/owner/repository"}` |
 
+## Static analysis
+
+On a READY project, select **Start static analysis**. The API commits QUEUED before publishing the run UUID to Celery; the worker transitions RUNNING → COMPLETED or FAILED. READY continues to mean source prepared. At most one active run per project is permitted; deletion is blocked during active analysis. A new run is the explicit retry mechanism. Completed metrics do not change.
+
+| Endpoint under `/api/v1/projects/{project_id}` | Contract |
+|---|---|
+| `POST /analyses` | Owner-only; no source/path body; returns 202 with persisted run |
+| `GET /analyses?offset=0` | Owner-only history, up to 50 runs |
+| `GET /analyses/{run_id}` | Status, timestamps, safe failure, summary, warnings |
+| `GET /analyses/{run_id}/entities?offset=0&limit=50&language=python` | Owner-only paginated metrics; limit 1–100, optional supported-language filter |
+
+The project page polls active runs every two seconds, stops at terminal status or unmount, shows safe failures and real metrics, and supports history/language/entity pagination. TypeScript displays `MODEL_UNAVAILABLE`. There is no ML output for any language. Supported files, exact feature names and semantics, analyzer/runtime versions, limitations and isolation are documented in [METRIC_SCHEMAS.md](docs/METRIC_SCHEMAS.md).
+
+Redis carries UUID-only task messages; PostgreSQL is the authoritative result store. Late acknowledgement and advisory locking make redelivery safe. Tool errors persist FAILED without partial entities; syntax errors can produce COMPLETED with warnings. Expired queued/running jobs become FAILED on run reads, new analysis, or project deletion. There is no periodic sweeper. Normal temporary data is removed on success/failure; after a hard crash, restart the worker container to discard its bounded private tmpfs. With native workers stopped, remove only confirmed orphan `kagex-analysis-*` directories. Source snapshots follow the Phase 2 retention rule below.
+
 Use cookies (`credentials: include` in the browser), `Origin: <trusted frontend origin>`, and `X-KageX-Request: 1` for writes. Ownership/status/storage fields supplied by clients are rejected. Missing and foreign projects both return 404; conflicting concurrent writes return 409 `PROJECT_BUSY`. Validation returns a safe 422 envelope. Domain failures return stable codes without filesystem paths.
 
 Passwords are Argon2id hashes (12–128 characters). Random opaque session tokens exist only in HttpOnly cookies; the database stores SHA-256 token digests. Default expiry is one hour, without sliding refresh. Development cookies work on localhost HTTP. Production requires `APP_ENV=production`, explicit HTTPS origins, and HTTPS termination; cookies become Secure, host-only `__Host-kagex_session`. Deploy UI/API on the same site for SameSite=Lax behavior. No JWT signing key, refresh-token endpoint, or browser storage credential is needed.
@@ -171,7 +198,7 @@ Ingestion is synchronous and bounded for Phase 2; the UI shows preparation activ
 
 ## Database migrations
 
-Revision `0001` is the empty foundation baseline; `6e605e1f5bed` adds users, hashed server sessions, and owner-scoped projects, with foreign keys, constraints, and indexes.
+Revision `0001` is the empty foundation baseline; `6e605e1f5bed` adds users, hashed server sessions, and owner-scoped projects. `f2de3d2ac9dd` adds analysis runs/entities, cascading foreign keys, active-run uniqueness, entity identity uniqueness and query indexes. Downgrading Phase 3 removes analysis history and metrics while retaining Phase 2 account/project data.
 
 ```bash
 cd backend
@@ -218,7 +245,7 @@ npx playwright install --with-deps chromium
 npm run test:e2e
 ```
 
-The tests exercise real HTTP cookies, registration/login, protected navigation, CRUD, malicious ZIP rejection, retry, source persistence, and deletion at desktop/mobile widths. They create unique disposable test accounts and delete their projects; accounts remain in the local development database. Do not run them against a production service.
+The tests exercise real HTTP cookies, registration/login, CRUD, malicious ZIP rejection, retry, source persistence, analysis failure, and successful four-language Celery analysis at desktop/mobile widths. They create unique disposable test accounts and delete successful test projects; accounts and failed-test artifacts may remain for inspection. Do not run them against a production service. The browser fixture builder needs Python 3 and only archives inert fixture bytes.
 
 Format edits with `uv run ruff format .` in `backend` and `npm run format` in `frontend`. Backend integration tests require PostgreSQL and create/drop isolated randomly named schemas using migrations. The default test URL uses the disposable Compose credentials; export `TEST_DATABASE_URL` for another test database. The test database account needs schema creation permission. Redis is only required for live infrastructure checks. Infrastructure checks use real PostgreSQL, Redis, migrations, API requests, and a Celery task.
 
@@ -230,15 +257,16 @@ GitHub Actions runs frontend checks/build, backend checks against a PostgreSQL s
 .github/workflows/ci.yml
 backend/
   app/
-    api/                 # auth, projects, ingestion routes, operational endpoints
+    api/                 # auth, projects, ingestion, analysis, operational endpoints
+    analyzers/           # contracts, safe discovery/process boundary, trusted tools
     core/                # typed settings and safe errors
     db/                  # SQLAlchemy base, engine, session dependency
-    models/              # User, AuthSession, Project
+    models/              # User, AuthSession, Project, AnalysisRun, AnalysisEntity
     schemas/             # validated public API contracts
-    services/            # ZIP/GitHub ingestion and confined storage
-    workers/             # Celery and harmless ping task
+    services/            # ingestion, storage, analysis lifecycle/publication
+    workers/             # Celery analysis and harmless ping task
     main.py              # application factory and resource lifecycle
-  alembic/versions/      # baseline and Phase 2 schema
+  alembic/versions/      # baseline, Phase 2, Phase 3 migrations
   tests/
   pyproject.toml
   uv.lock
@@ -266,7 +294,7 @@ README.md
 
 ## Security and project documents
 
-ZIP and public GitHub archives are stored as inert files in isolated project directories. No source execution, dependency installation, Git subprocess, analyzer, or prediction path exists. Future analysis must parse untrusted source statically in isolated workspaces. Never execute source, install dependencies, run tests, or trigger build hooks from submitted repositories. No prediction may be fabricated; incompatible or missing models must produce an explicit unavailable state.
+ZIP and public GitHub archives are stored as inert files in isolated project directories. Trusted analyzers parse bounded copies in private worker workspaces. Never execute source, install dependencies, run tests, or trigger build hooks from submitted repositories. No prediction may be fabricated; incompatible or missing models must produce an explicit unavailable state.
 
 - [Engineering contract](AGENT.md)
 - [Current state and verification](docs/PROJECT_STATE.md)

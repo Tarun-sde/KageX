@@ -7,11 +7,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from redis import Redis
 
 from app import __version__
-from app.api import auth, health, projects, status
+from app.api import analyses, auth, health, projects, status
 from app.core.body_limit import BodyLimitMiddleware
 from app.core.config import Settings
 from app.core.errors import register_error_handlers
 from app.db.session import create_db_engine
+from app.workers.config import create_celery
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -34,11 +35,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
         app.state.engine = engine
         app.state.redis = redis
+        app.state.celery = create_celery(settings)
         try:
             yield
         finally:
             redis.close()
             engine.dispose()
+            app.state.celery.close()
 
     app = FastAPI(title="KageX API", version=__version__, lifespan=lifespan)
     app.state.settings = settings
@@ -54,6 +57,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     register_error_handlers(app)
     app.include_router(projects.router)
+    app.include_router(analyses.router)
     app.include_router(auth.router)
     app.include_router(health.router)
     app.include_router(status.router)

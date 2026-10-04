@@ -65,8 +65,8 @@ export function Workspace() {
         Prepare for a <em className="text-accent">closer look.</em>
       </h1>
       <p className="mt-6 text-muted">
-        Securely store source for future analysis. Analysis features are not yet
-        available.
+        Securely prepare source and extract static metrics without executing
+        code.
       </p>
       {error && (
         <p role="alert" className="my-6 text-accent">

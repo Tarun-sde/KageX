@@ -13,6 +13,7 @@ from starlette.requests import ClientDisconnect
 from app.core.errors import APIError
 from app.core.security import DB, Config, CurrentUser, require_csrf
 from app.models import Project, ProjectStatus, SourceType
+from app.models.analysis import AnalysisRun
 from app.schemas import GitHubInput, ProjectCreate, ProjectOut, ProjectUpdate
 from app.services.github import download_github, parse_github_url
 from app.services.ingestion import ingest, preparation_workspace
@@ -108,6 +109,22 @@ def update_project(data: ProjectUpdate, project: OwnedProject, db: DB) -> Projec
 
 @router.delete("/{project_id}", status_code=204)
 def delete_project(project: OwnedProject, db: DB, settings: Config) -> None:
+    from app.services.analysis import ACTIVE, expire_runs
+
+    expire_runs(db, project.id)
+    if (
+        db.scalar(
+            select(AnalysisRun.id).where(
+                AnalysisRun.project_id == project.id, AnalysisRun.status.in_(ACTIVE)
+            )
+        )
+        is not None
+    ):
+        raise APIError(
+            409,
+            "ANALYSIS_ALREADY_RUNNING",
+            "Wait for the active analysis before deleting this project.",
+        )
     try:
         with Storage(settings).deleting(project.id):
             db.delete(project)

@@ -2,7 +2,7 @@
 
 ## 1. PHASE 2 STATUS
 
-**INCOMPLETE — hosted CI verification pending.** Local implementation and acceptance checks pass. Phase 3 has not started.
+**COMPLETE.** Local implementation and acceptance checks pass, and the project owner confirmed the hosted GitHub Actions workflow is green. Phase 3 has not started.
 
 ## 2. BASELINE VERIFIED
 
@@ -25,7 +25,7 @@ Paths delivered relative to repository root, including the preserved partial Pha
 - Backend settings/main/errors/session metadata/Alembic environment: configure sessions/storage/limits, register routes, safe errors, support real migration tests. Dockerfile creates private storage. pyproject/uv.lock add Argon2, email validation and runtime HTTP client.
 - Frontend App/Workspace/API client/styles: protected account/project flows using existing visual primitives. Vitest tests expanded. package/lock/TypeScript/Vite/lint/format settings include Playwright and exclude generated test output.
 - `.env.example`, `.gitignore`, `docker-compose.yml`, `.github/workflows/ci.yml`: limits, ignored private storage, persistent non-root volume, PostgreSQL/migration/E2E verification.
-- `README.md`, `AGENT.md`, `docs/PROJECT_STATE.md`, `docs/TECHNICAL_DECISIONS.md`: actual API, setup, storage/auth choices, commands, limitations, evidence and pending hosted gate. Frozen roadmap/design/ML methodology unchanged.
+- `README.md`, `AGENT.md`, `docs/PROJECT_STATE.md`, `docs/TECHNICAL_DECISIONS.md`: actual API, setup, storage/auth choices, commands, limitations and verification evidence. Frozen roadmap/design/ML methodology unchanged.
 
 ## 5. DATABASE SCHEMA
 
@@ -85,7 +85,7 @@ PASS: Compose config; rebuilt current images; migrations exited 0; backend/front
 
 ## 19. CI STATUS
 
-Updated workflow runs backend checks against PostgreSQL (including migrations/security tests), frontend checks/build, Docker runtime gates and Playwright. PASS: local commands, YAML parsing and job/step structure; manually reviewed service/command wiring. **Hosted Phase 2 GitHub Actions: NOT TESTED.** No push/commit or successful hosted run for these changes; formal phase completion remains blocked on that gate.
+Updated workflow runs backend checks against PostgreSQL (including migrations/security tests), frontend checks/build, Docker runtime gates and Playwright. PASS: local commands, YAML parsing and job/step structure; manually reviewed service/command wiring. **Hosted Phase 2 GitHub Actions: PASS**, confirmed by the project owner.
 
 ## 20. PHASE 0 / PHASE 1 REGRESSION CHECK
 
@@ -93,7 +93,7 @@ PASS: frozen per-language strategy, Java class/Python function/JavaScript file g
 
 ## 21. PHASE 2 ACCEPTANCE CRITERIA
 
-Every requested criterion is listed below; N/A only applies to the conditional asynchronous ingestion task. Hosted CI is the sole unverified gate.
+Every requested criterion is listed below; N/A only applies to the conditional asynchronous ingestion task.
 
 | Area | Criterion | Result |
 |---|---|---|
@@ -161,7 +161,7 @@ Every requested criterion is listed below; N/A only applies to the conditional a
 | Infrastructure | Celery works | PASS |
 | Infrastructure | migrations work in containers | PASS |
 | CI | GitHub Actions configuration updated as necessary | PASS |
-| CI | hosted CI run is green | NOT TESTED |
+| CI | hosted CI run is green | PASS — confirmed by project owner |
 | Security | no user source execution | PASS |
 | Security | no fake ML output | PASS |
 | Security | no secrets committed | PASS |
@@ -175,11 +175,11 @@ Every requested criterion is listed below; N/A only applies to the conditional a
 - Same-site cookie deployment required. No account reset/verification/OAuth; sessions expire absolutely and require login again. Expired session rows are pruned on subsequent login for that user.
 - Strict ZIP policy rejects linked/ZIP64/split/self-extracting/unsupported-compression repositories. GitHub imports follow default-branch HEAD and do not store a resolved commit SHA. Nested archives and binaries are retained without inspection.
 - Synchronous preparation holds a project row/connection; configured resource limits keep Phase 2 bounded. Network deadlines are cooperative and an active read may extend by up to its five-second timeout.
-- E2E creates disposable accounts in the dev database; test projects are deleted. Hosted CI still pending.
+- E2E creates disposable accounts in the dev database; test projects are deleted.
 
 ## 23. PHASE 3 READINESS
 
-**NOT READY** until hosted Phase 2 CI is green. No Phase 3 work was started.
+**READY.** All Phase 2 gates pass. No Phase 3 work was started.
 
 ## 24. IMPORTANT NOTES FOR PHASE 3
 

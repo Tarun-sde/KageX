@@ -36,8 +36,8 @@ def test_health_and_versioned_status(client: TestClient) -> None:
         "version": "0.1.0",
     }
     assert client.get("/api/v1/status").json() == {
-        "phase": "foundation",
-        "analysis_available": False,
+        "phase": "static_analysis",
+        "analysis_available": True,
     }
 
 

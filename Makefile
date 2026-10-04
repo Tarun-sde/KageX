@@ -1,6 +1,7 @@
 .PHONY: install check backend-check frontend-check up down migrate
 install:
 	cd backend && uv sync --locked
+	cd backend && npm ci --ignore-scripts --prefix app/analyzers/tools && uv run python app/analyzers/tools/install_ck.py
 	cd frontend && npm ci
 check: backend-check frontend-check
 backend-check:

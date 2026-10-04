@@ -30,6 +30,18 @@ jobs:
           enable-cache: true
           cache-dependency-glob: backend/uv.lock
       - run: uv sync --locked --python 3.14
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.14.0'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: npm ci --ignore-scripts --prefix app/analyzers/tools
+      - run: uv run python app/analyzers/tools/install_ck.py
+      - run: |
+          echo "ANALYZER_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          echo "ANALYZER_JAVA=$JAVA_HOME/bin/java" >> "$GITHUB_ENV"
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run mypy .

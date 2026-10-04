@@ -3,6 +3,7 @@ import stat
 import struct
 import time
 import zipfile
+from collections.abc import Sequence
 from pathlib import Path
 from unittest.mock import patch
 from uuid import UUID, uuid4
@@ -19,7 +20,7 @@ from tests.conftest import project, register
 
 
 def archive(
-    entries: list[tuple[str | zipfile.ZipInfo, bytes]],
+    entries: Sequence[tuple[str | zipfile.ZipInfo, bytes]],
     compression: int = zipfile.ZIP_STORED,
 ) -> bytes:
     output = io.BytesIO()

@@ -22,3 +22,5 @@ test-results/
 
 # Untrusted local project source
 .data/
+backend/app/analyzers/tools/ck.jar
+backend/app/analyzers/tools/*.class

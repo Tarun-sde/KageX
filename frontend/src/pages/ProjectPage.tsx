@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Panel } from '../components/Panel';
+import { AnalysisPanel } from '../components/AnalysisPanel';
 import { errorMessage } from '../services/api';
 import {
   deleteProject,
@@ -123,13 +124,14 @@ function ProjectDetail({ id }: { id: string }) {
             {busy
               ? 'Saving / preparing source…'
               : project.status === 'READY'
-                ? 'Source ready for future analysis'
+                ? 'Source ready for static analysis'
                 : project.status === 'FAILED'
                   ? `Ingestion failed · ${project.error_code}`
                   : 'Awaiting source'}
           </p>
           <p className="mt-4 text-muted">
-            Source is stored without execution. No analysis has been performed.
+            Source is stored without execution. Static analysis runs are tracked
+            separately below.
           </p>
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             <Panel title="Project source">
@@ -223,6 +225,7 @@ function ProjectDetail({ id }: { id: string }) {
               </button>
             </Panel>
           </div>
+          {project.status === 'READY' && <AnalysisPanel projectId={id} />}
         </>
       )}
     </section>

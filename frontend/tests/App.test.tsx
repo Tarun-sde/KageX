@@ -62,7 +62,7 @@ describe('foundation regression', () => {
       await screen.findByText('PostgreSQL & Redis ready'),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Analysis features are not yet available/),
+      screen.getByText(/extract static metrics without executing code/),
     ).toBeInTheDocument();
   });
   it('shows session loading, handles failure, and supports retry', async () => {
@@ -204,7 +204,7 @@ describe('authentication and project flows', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Awaiting source')).toBeInTheDocument();
     expect(
-      screen.getByText(/No analysis has been performed/),
+      screen.getByText(/Static analysis runs are tracked separately/),
     ).toBeInTheDocument();
   });
   it('rejects an empty upload before making a request', async () => {
@@ -283,7 +283,7 @@ it('submits a public GitHub URL and displays source readiness', async () => {
   });
   fireEvent.click(screen.getByRole('button', { name: 'Prepare source' }));
   expect(
-    await screen.findByText('Source ready for future analysis'),
+    await screen.findByText('Source ready for static analysis'),
   ).toBeInTheDocument();
   expect(fetcher).toHaveBeenCalledWith(
     expect.stringContaining('/source/github'),

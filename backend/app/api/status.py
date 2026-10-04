@@ -7,8 +7,8 @@ router = APIRouter(prefix="/api/v1")
 
 
 class Status(BaseModel):
-    phase: Literal["foundation"] = "foundation"
-    analysis_available: Literal[False] = False
+    phase: Literal["static_analysis"] = "static_analysis"
+    analysis_available: Literal[True] = True
 
 
 @router.get("/status", response_model=Status)

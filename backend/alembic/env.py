@@ -4,6 +4,7 @@ from alembic import context
 from app import models  # noqa: F401 — register current model metadata
 from app.core.config import Settings
 from app.db.session import Base, create_db_engine
+from app.models import analysis  # noqa: F401 — register analysis metadata
 
 if context.is_offline_mode():
     context.configure(

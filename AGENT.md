@@ -1085,4 +1085,15 @@ At the start of Phase 1:
 - Backend integration tests use real PostgreSQL, isolated schemas, and Alembic. Export `TEST_DATABASE_URL` when not using disposable Compose defaults.
 - Run `npm run test:e2e` in frontend with the full stack running after changes to authentication or project workflows.
 - Private source retention and crash-recovery limitations are documented in README and TD-011. Never expose the source volume as a static route.
-- Phase 2 remains incomplete until a hosted CI run passes for the delivered revision. Phase 3 is not authorized by this implementation.
+- Phase 2 is complete; the project owner confirmed the delivered revision passed hosted CI. Phase 3 is ready to start when explicitly requested.
+
+## 44. Phase 3 Operational Rules
+
+- Phase 3 is authorized; check PROJECT_STATE.md for remaining verification. Do not start Phase 4.
+- READY remains source preparation. AnalysisRun has separate QUEUED/RUNNING/COMPLETED/FAILED states; results are immutable after completion and retries create another run.
+- Metric feature sets, semantics, tool versions and limitations are in docs/METRIC_SCHEMAS.md. Never silently change them or equate similarly named metrics across languages.
+- Run source analyzers only in the worker using KageX-owned fixed tools/configuration. Never execute submitted source or install its dependencies.
+- Native setup additionally needs trusted Java/Node analyzer tools: `npm ci --ignore-scripts --prefix app/analyzers/tools` and `uv run python app/analyzers/tools/install_ck.py` from backend. JDK 17+ is needed for the KageX wrapper only.
+- Worker Docker image has trusted Java/Node runtimes, read-only source storage and bounded ephemeral scratch space. Rebuild worker after analyzer edits. Keep CK artifact readable by the non-root worker.
+- All analysis endpoints must reuse project ownership/CSRF protection. PostgreSQL is authoritative; enforce active-run uniqueness and atomic publication.
+- No prediction/risk/model behavior exists in Phase 3. TypeScript prediction remains MODEL_UNAVAILABLE. Hosted Phase 3 CI must pass before phase closure.

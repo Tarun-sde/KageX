@@ -145,4 +145,22 @@ A database transaction cannot make filesystem operations crash-atomic. Abrupt pr
 
 Integration tests run PostgreSQL migrations in isolated schemas, never SQLite substitutes or shared-table truncation. Tests cover authentication, CSRF, ownership for all mutations/intake routes, concurrent row locks, storage rollback, malformed/hostile ZIPs, size/ratio/count/time limits, fixed-host GitHub intake, and failure retry. Playwright is now justified by real critical account/project flows and runs against the full Docker stack at desktop/mobile sizes. No submitted code is executed by tests or application ingestion.
 
-The owner confirmed Phase 1 hosted CI success. Phase 2 local checks do not certify hosted CI: keep **INCOMPLETE — hosted CI verification pending** until the updated workflow succeeds for the delivered revision. Phase 3 has not started. All Phase 0 ML/data/security decisions remain frozen.
+The owner confirmed Phase 1 and Phase 2 hosted CI success. Phase 2 is complete and frozen; Phase 3 is ready to start when explicitly requested. All Phase 0 ML/data/security decisions remain frozen.
+
+## TD-013: Phase 3 Static Metrics and Reproducibility (2026-10-04)
+
+Phase 3 implements CK 0.7.0 class metrics, Radon 6.0.1 plus Python AST function metrics, ESLint 10.12.0 plus ts-morph 28.0.0 JavaScript file metrics, and ts-morph TypeScript file metrics. TypeScript parser 6.0.2 is locked transitively. [METRIC_SCHEMAS.md](METRIC_SCHEMAS.md) and the central contracts module define exact features and versioned schemas. Runtime versions are recorded per entity. No generic cross-language complexity vector, JavaParser duplicate implementation, predictions, training or model registry is added.
+
+CK's bundled JDT accepts Java 11 syntax; unsupported syntax is a warning. CK is checksum-pinned and receives no submitted dependencies. Class binding limitations are explicit entity warnings. Python includes nested function entities and documents overlapping subtree metrics; MI uses normalized AST source to handle indentation and multiline strings safely. JS complexity uses only fixed ESLint configuration; TS structural decisions remain a distinct metric. Repository ESLint/tsconfig/package configuration cannot control tools. Dependencies are installed only from KageX's locks during setup/build.
+
+## TD-014: Durable Analysis Runs and Bounded Workers (2026-10-04)
+
+Add only AnalysisRun and AnalysisEntity. Foreign keys cascade project → runs → entities. A PostgreSQL partial unique index enforces one active run per project; identity uniqueness prevents duplicate entities. Owner-scoped APIs commit QUEUED before publishing its UUID. Worker advisory locking, late acknowledgement, original deadlines, and terminal no-ops protect duplicate deliveries. Results publish atomically. A failed enqueue persists a safe failure; no transactional outbox is added. If the API dies between commit and publish, reads/new-run/delete operations expire the stale run after its deadline. There is no periodic recovery service.
+
+Existing immutable source is discovered under the server's UUID root and copied with no-follow regular-file reads into a private workspace. Commands are fixed arrays, environment is sanitized, and tool/CPU/output/memory/task limits apply. Linux parent-death protection kills orphan analyzers. Docker uses a non-root worker, read-only source volume, 2 GiB memory, 128 PIDs, and 512 MiB private tmpfs. Normal cleanup is automatic; hard-crash orphan scratch is discarded by worker-container restart. Native cleanup requires stopped workers and confirmed orphan directories. Operators must complete that recovery rather than retain scratch indefinitely.
+
+Parse failures yield relative-path warnings; useful entities can complete with warnings. Tool failure, expiry, or no analyzable entities yields FAILED and no partial metric publication. Public APIs never expose source, raw tool output, stack traces or internal paths. READY continues to describe preparation only. Project deletion is blocked for active analysis; retries create another run. No additional progress state, percent-complete estimate, cancellation API, automatic retry loop, scheduler or service is required for Phase 3.
+
+## TD-015: Phase 3 Verification Gate (2026-10-04)
+
+Real fixture-based analyzers, PostgreSQL lifecycle/ownership/migration tests, frontend polling/error tests and browser flows through the real Docker Celery worker are required. CI installs only trusted analyzer dependencies and runs these checks. Local success does not replace a hosted run for the delivered revision. Phase 3 remains incomplete and Phase 4 not ready until hosted GitHub Actions is green.
