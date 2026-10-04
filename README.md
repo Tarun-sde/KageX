@@ -11,7 +11,8 @@ KageX is a final-year project for language-specific static metrics and validated
 - **Phase 0: COMPLETE / FROZEN.** Architecture, datasets, granularities, and ML integrity rules remain unchanged.
 - **Phase 1: COMPLETE / FROZEN.** Hosted CI success confirmed by the project owner.
 - **Phase 2: COMPLETE.** Local verification and the hosted GitHub Actions workflow are green; evidence is recorded in [PROJECT_STATE](docs/PROJECT_STATE.md) and [Phase 2 verification](docs/PHASE_2_VERIFICATION.md).
-- **Phase 3: INCOMPLETE — hosted CI verification pending.** Static analysis is implemented; see [Phase 3 verification](docs/PHASE_3_VERIFICATION.md) and [metric contracts](docs/METRIC_SCHEMAS.md). Phase 4 has not started.
+- **Phase 3: COMPLETE / FROZEN.** The project owner confirmed hosted CI is green. See [Phase 3 verification](docs/PHASE_3_VERIFICATION.md) and [metric contracts](docs/METRIC_SCHEMAS.md).
+- **Phase 4A: INCOMPLETE — hosted CI verification pending.** Scoped dataset acquisition and local audits pass; PyTraceBugs' full artifact is unavailable. See [dataset audit](docs/PHASE_4A_DATASET_AUDIT.md) and [feature candidates](docs/PHASE_4A_FEATURE_REFERENCE.md). Phase 4B is not ready.
 
 ### Implemented
 

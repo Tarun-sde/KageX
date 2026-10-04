@@ -1,0 +1,61 @@
+{
+  "manifest_version": 1,
+  "dataset": {
+    "dataset_id": "python_pytracebugs_89a09db9add3",
+    "canonical_name": "PyTraceBugs",
+    "language": "python",
+    "source_type": "official_repository_metadata",
+    "upstream": "https://github.com/acheshkov/pytracebugs",
+    "version": "89a09db9add3ec174e3828b83e1792c6fc6ad5d2",
+    "license": "MIT",
+    "license_scope": "Repository LICENSE only; unavailable external artifact/underlying snippets require separate review.",
+    "reference": "https://doi.org/10.1109/APSEC53868.2021.00022",
+    "granularity": "function/method snippets (upstream documentation; data unavailable)",
+    "label_semantics": "Upstream describes buggy and stable snippet collections; not measured or recreated here.",
+    "scope": "Pinned README/LICENSE only; external v1 RAR is unavailable. No pickle deserialization.",
+    "acquisition_status": "PARTIAL_METADATA",
+    "blocker": "Official https://pytracebugs-dataset.obs.ap-southeast-3.myhuaweicloud.com/pytracebugs_dataset_v1.rar returned HTTP 404 during this audit. Request a restored versioned artifact and checksums from the authors through the official repository; request CSV/JSON and inert source rather than loading pickle. No substitute mirror is authorized.",
+    "sources": [
+      {
+        "filename": "README.md",
+        "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/README.md",
+        "extract_zip": false,
+        "upstream_md5": null
+      },
+      {
+        "filename": "LICENSE",
+        "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/LICENSE",
+        "extract_zip": false,
+        "upstream_md5": null
+      }
+    ]
+  },
+  "acquired_at": "2026-10-04T08:05:52.590849Z",
+  "checksum_provenance": "SHA-256 measured on initial approved-source acquisition; GitHub URLs pin commits where possible. Zenodo CSV MD5 additionally verified against archival metadata. Subsequent acquisition must match this manifest exactly.",
+  "artifacts": [
+    {
+      "filename": "README.md",
+      "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/README.md",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "b245e64c9b0689203a393fdf9924cb14f8e2585b3f218a8ab375572e6e7cacac",
+      "size_bytes": 4684
+    },
+    {
+      "filename": "LICENSE",
+      "url": "https://raw.githubusercontent.com/acheshkov/pytracebugs/89a09db9add3ec174e3828b83e1792c6fc6ad5d2/LICENSE",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "310300bff55e18942fa0d94c92588fd88a2a5583275e53f698253bd31f002bdd",
+      "size_bytes": 1066
+    }
+  ],
+  "extracted_files": {},
+  "profile": {
+    "records": null,
+    "missingness": null,
+    "duplicates": null,
+    "class_balance": null,
+    "reason": "External PyTraceBugs artifact returned HTTP 404. Only upstream README and LICENSE were acquired; descriptions are not measured dataset findings."
+  }
+}

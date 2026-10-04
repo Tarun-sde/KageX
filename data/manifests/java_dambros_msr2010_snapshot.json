@@ -1,0 +1,1475 @@
+{
+  "manifest_version": 1,
+  "dataset": {
+    "dataset_id": "java_dambros_msr2010_snapshot",
+    "canonical_name": "D'Ambros bug prediction dataset — single-version CK/OO tables",
+    "language": "java",
+    "source_type": "original_research_artifact",
+    "upstream": "https://bug.inf.usi.ch/download.php",
+    "version": null,
+    "license": null,
+    "license_scope": "No explicit dataset license found on original description/download pages; underlying project licenses are separate.",
+    "reference": "https://marcodambros.gitlab.io/publications/msr10.pdf",
+    "granularity": "class",
+    "label_semantics": "bugs and categorized post-release defect counts; count fields remain unchanged.",
+    "scope": "All five published single-version CK/OO CSV tables. Historical/churn/entropy archives are not acquired. Upstream has no immutable release ID; freeze downloaded bytes by SHA-256.",
+    "acquisition_status": "ACQUIRED",
+    "blocker": null,
+    "sources": [
+      {
+        "filename": "eclipse.csv",
+        "url": "https://bug.inf.usi.ch/data/eclipse/single-version-ck-oo.csv",
+        "extract_zip": false,
+        "upstream_md5": null
+      },
+      {
+        "filename": "pde.csv",
+        "url": "https://bug.inf.usi.ch/data/pde/single-version-ck-oo.csv",
+        "extract_zip": false,
+        "upstream_md5": null
+      },
+      {
+        "filename": "equinox.csv",
+        "url": "https://bug.inf.usi.ch/data/equinox/single-version-ck-oo.csv",
+        "extract_zip": false,
+        "upstream_md5": null
+      },
+      {
+        "filename": "lucene.csv",
+        "url": "https://bug.inf.usi.ch/data/lucene/single-version-ck-oo.csv",
+        "extract_zip": false,
+        "upstream_md5": null
+      },
+      {
+        "filename": "mylyn.csv",
+        "url": "https://bug.inf.usi.ch/data/mylyn/single-version-ck-oo.csv",
+        "extract_zip": false,
+        "upstream_md5": null
+      },
+      {
+        "filename": "index.html",
+        "url": "https://bug.inf.usi.ch/index.php",
+        "extract_zip": false,
+        "upstream_md5": null
+      },
+      {
+        "filename": "download.html",
+        "url": "https://bug.inf.usi.ch/download.php",
+        "extract_zip": false,
+        "upstream_md5": null
+      }
+    ]
+  },
+  "acquired_at": "2026-10-04T07:57:08.129305Z",
+  "checksum_provenance": "SHA-256 measured on initial approved-source acquisition; GitHub URLs pin commits where possible. Zenodo CSV MD5 additionally verified against archival metadata. Subsequent acquisition must match this manifest exactly.",
+  "artifacts": [
+    {
+      "filename": "eclipse.csv",
+      "url": "https://bug.inf.usi.ch/data/eclipse/single-version-ck-oo.csv",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "c65a5acf220b4210279297354f92081f305b98a11a1bc2aa0e2901029285a141",
+      "size_bytes": 168708
+    },
+    {
+      "filename": "pde.csv",
+      "url": "https://bug.inf.usi.ch/data/pde/single-version-ck-oo.csv",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "224ffa4f7a380f7f5a5a9fef51949cc1802b5621a83687de7020a2d39ab966fd",
+      "size_bytes": 260094
+    },
+    {
+      "filename": "equinox.csv",
+      "url": "https://bug.inf.usi.ch/data/equinox/single-version-ck-oo.csv",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "d717c904c68a5ee5e568edc7413d9c26dcdb491386d6d22e20b2476cc8f93b9f",
+      "size_bytes": 52013
+    },
+    {
+      "filename": "lucene.csv",
+      "url": "https://bug.inf.usi.ch/data/lucene/single-version-ck-oo.csv",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "ce13998927043a99d63f127b97301516decd0df27921ceec181327c2cd4ad7a1",
+      "size_bytes": 108763
+    },
+    {
+      "filename": "mylyn.csv",
+      "url": "https://bug.inf.usi.ch/data/mylyn/single-version-ck-oo.csv",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "30435d3a367273f126315f38ef310a5d91792c8d06d7a48f6a8ccb841c09ad72",
+      "size_bytes": 327836
+    },
+    {
+      "filename": "index.html",
+      "url": "https://bug.inf.usi.ch/index.php",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "c0a4268032da97a49ccf966dcd8e6efd392a7a2b0e35a5d4d48941fb87863334",
+      "size_bytes": 7774
+    },
+    {
+      "filename": "download.html",
+      "url": "https://bug.inf.usi.ch/download.php",
+      "extract_zip": false,
+      "upstream_md5": null,
+      "sha256": "a4aa4dd0756bf1c0aaf00180d2c9783835e1e178d87b30f2e1da79f22c3e49b8",
+      "size_bytes": 10593
+    }
+  ],
+  "extracted_files": {},
+  "profile": {
+    "tables": {
+      "eclipse.csv": {
+        "raw_columns": [
+          "classname ",
+          " cbo ",
+          " dit ",
+          " fanIn ",
+          " fanOut ",
+          " lcom ",
+          " noc ",
+          " numberOfAttributes ",
+          " numberOfAttributesInherited ",
+          " numberOfLinesOfCode ",
+          " numberOfMethods ",
+          " numberOfMethodsInherited ",
+          " numberOfPrivateAttributes ",
+          " numberOfPrivateMethods ",
+          " numberOfPublicAttributes ",
+          " numberOfPublicMethods ",
+          " rfc ",
+          " wmc ",
+          " bugs ",
+          " nonTrivialBugs ",
+          " majorBugs ",
+          " criticalBugs ",
+          " highPriorityBugs ",
+          " "
+        ],
+        "columns_trimmed_for_audit_only": [
+          "classname",
+          "cbo",
+          "dit",
+          "fanIn",
+          "fanOut",
+          "lcom",
+          "noc",
+          "numberOfAttributes",
+          "numberOfAttributesInherited",
+          "numberOfLinesOfCode",
+          "numberOfMethods",
+          "numberOfMethodsInherited",
+          "numberOfPrivateAttributes",
+          "numberOfPrivateMethods",
+          "numberOfPublicAttributes",
+          "numberOfPublicMethods",
+          "rfc",
+          "wmc",
+          "bugs",
+          "nonTrivialBugs",
+          "majorBugs",
+          "criticalBugs",
+          "highPriorityBugs",
+          ""
+        ],
+        "rows": 997,
+        "malformed_rows": 0,
+        "duplicate_rows_exact": 0,
+        "duplicate_column_names": [],
+        "missing_by_column_index_and_name": {
+          "0:classname": 0,
+          "1:cbo": 0,
+          "2:dit": 0,
+          "3:fanIn": 0,
+          "4:fanOut": 0,
+          "5:lcom": 0,
+          "6:noc": 0,
+          "7:numberOfAttributes": 0,
+          "8:numberOfAttributesInherited": 0,
+          "9:numberOfLinesOfCode": 0,
+          "10:numberOfMethods": 0,
+          "11:numberOfMethodsInherited": 0,
+          "12:numberOfPrivateAttributes": 0,
+          "13:numberOfPrivateMethods": 0,
+          "14:numberOfPublicAttributes": 0,
+          "15:numberOfPublicMethods": 0,
+          "16:rfc": 0,
+          "17:wmc": 0,
+          "18:bugs": 0,
+          "19:nonTrivialBugs": 0,
+          "20:majorBugs": 0,
+          "21:criticalBugs": 0,
+          "22:highPriorityBugs": 0,
+          "23:": 997
+        },
+        "numeric_summary": {
+          "1:cbo": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 156.0,
+            "median": 7.0
+          },
+          "2:dit": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 1.0,
+            "max": 8.0,
+            "median": 2.0
+          },
+          "3:fanIn": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 137.0,
+            "median": 2.0
+          },
+          "4:fanOut": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 93.0,
+            "median": 4.0
+          },
+          "5:lcom": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 81003.0,
+            "median": 28.0
+          },
+          "6:noc": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 26.0,
+            "median": 0.0
+          },
+          "7:numberOfAttributes": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 313.0,
+            "median": 3.0
+          },
+          "8:numberOfAttributesInherited": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 563.0,
+            "median": 20.0
+          },
+          "9:numberOfLinesOfCode": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 7341.0,
+            "median": 75.0
+          },
+          "10:numberOfMethods": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 403.0,
+            "median": 8.0
+          },
+          "11:numberOfMethodsInherited": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 319.0,
+            "median": 33.0
+          },
+          "12:numberOfPrivateAttributes": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 40.0,
+            "median": 0.0
+          },
+          "13:numberOfPrivateMethods": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 111.0,
+            "median": 0.0
+          },
+          "14:numberOfPublicAttributes": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 312.0,
+            "median": 0.0
+          },
+          "15:numberOfPublicMethods": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 387.0,
+            "median": 5.0
+          },
+          "16:rfc": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2603.0,
+            "median": 30.0
+          },
+          "17:wmc": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1680.0,
+            "median": 20.0
+          },
+          "18:bugs": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 9.0,
+            "median": 0.0
+          },
+          "19:nonTrivialBugs": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2.0,
+            "median": 0.0
+          },
+          "20:majorBugs": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 3.0,
+            "median": 0.0
+          },
+          "21:criticalBugs": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1.0,
+            "median": 0.0
+          },
+          "22:highPriorityBugs": {
+            "valid": 997,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2.0,
+            "median": 0.0
+          }
+        },
+        "identity_column_index": 0,
+        "unique_identities": 997,
+        "duplicate_identities": 0,
+        "missing_identities": 0,
+        "labels": {
+          "field": "bugs",
+          "raw_distribution": {
+            "0": 791,
+            "1": 138,
+            "2": 31,
+            "3": 15,
+            "4": 8,
+            "5": 2,
+            "6": 4,
+            "7": 3,
+            "8": 3,
+            "9": 2
+          },
+          "zero": 791,
+          "positive": 206,
+          "invalid": 0,
+          "positive_fraction_valid": 0.20661985957873621
+        },
+        "project_versions": null
+      },
+      "equinox.csv": {
+        "raw_columns": [
+          "classname ",
+          " cbo ",
+          " dit ",
+          " fanIn ",
+          " fanOut ",
+          " lcom ",
+          " noc ",
+          " numberOfAttributes ",
+          " numberOfAttributesInherited ",
+          " numberOfLinesOfCode ",
+          " numberOfMethods ",
+          " numberOfMethodsInherited ",
+          " numberOfPrivateAttributes ",
+          " numberOfPrivateMethods ",
+          " numberOfPublicAttributes ",
+          " numberOfPublicMethods ",
+          " rfc ",
+          " wmc ",
+          " bugs ",
+          " nonTrivialBugs ",
+          " majorBugs ",
+          " criticalBugs ",
+          " highPriorityBugs ",
+          " "
+        ],
+        "columns_trimmed_for_audit_only": [
+          "classname",
+          "cbo",
+          "dit",
+          "fanIn",
+          "fanOut",
+          "lcom",
+          "noc",
+          "numberOfAttributes",
+          "numberOfAttributesInherited",
+          "numberOfLinesOfCode",
+          "numberOfMethods",
+          "numberOfMethodsInherited",
+          "numberOfPrivateAttributes",
+          "numberOfPrivateMethods",
+          "numberOfPublicAttributes",
+          "numberOfPublicMethods",
+          "rfc",
+          "wmc",
+          "bugs",
+          "nonTrivialBugs",
+          "majorBugs",
+          "criticalBugs",
+          "highPriorityBugs",
+          ""
+        ],
+        "rows": 324,
+        "malformed_rows": 0,
+        "duplicate_rows_exact": 0,
+        "duplicate_column_names": [],
+        "missing_by_column_index_and_name": {
+          "0:classname": 0,
+          "1:cbo": 0,
+          "2:dit": 0,
+          "3:fanIn": 0,
+          "4:fanOut": 0,
+          "5:lcom": 0,
+          "6:noc": 0,
+          "7:numberOfAttributes": 0,
+          "8:numberOfAttributesInherited": 0,
+          "9:numberOfLinesOfCode": 0,
+          "10:numberOfMethods": 0,
+          "11:numberOfMethodsInherited": 0,
+          "12:numberOfPrivateAttributes": 0,
+          "13:numberOfPrivateMethods": 0,
+          "14:numberOfPublicAttributes": 0,
+          "15:numberOfPublicMethods": 0,
+          "16:rfc": 0,
+          "17:wmc": 0,
+          "18:bugs": 0,
+          "19:nonTrivialBugs": 0,
+          "20:majorBugs": 0,
+          "21:criticalBugs": 0,
+          "22:highPriorityBugs": 0,
+          "23:": 324
+        },
+        "numeric_summary": {
+          "1:cbo": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 77.0,
+            "median": 6.0
+          },
+          "2:dit": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 1.0,
+            "max": 3.0,
+            "median": 1.0
+          },
+          "3:fanIn": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 32.0,
+            "median": 1.0
+          },
+          "4:fanOut": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 67.0,
+            "median": 4.0
+          },
+          "5:lcom": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2775.0,
+            "median": 15.0
+          },
+          "6:noc": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 6.0,
+            "median": 0.0
+          },
+          "7:numberOfAttributes": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 138.0,
+            "median": 2.0
+          },
+          "8:numberOfAttributesInherited": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 74.0,
+            "median": 0.0
+          },
+          "9:numberOfLinesOfCode": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1805.0,
+            "median": 45.0
+          },
+          "10:numberOfMethods": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 75.0,
+            "median": 6.0
+          },
+          "11:numberOfMethodsInherited": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 111.0,
+            "median": 9.0
+          },
+          "12:numberOfPrivateAttributes": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 82.0,
+            "median": 1.0
+          },
+          "13:numberOfPrivateMethods": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 49.0,
+            "median": 0.0
+          },
+          "14:numberOfPublicAttributes": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 137.0,
+            "median": 0.0
+          },
+          "15:numberOfPublicMethods": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 54.0,
+            "median": 4.0
+          },
+          "16:rfc": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1009.0,
+            "median": 18.0
+          },
+          "17:wmc": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 534.0,
+            "median": 12.0
+          },
+          "18:bugs": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 13.0,
+            "median": 0.0
+          },
+          "19:nonTrivialBugs": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1.0,
+            "median": 0.0
+          },
+          "20:majorBugs": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1.0,
+            "median": 0.0
+          },
+          "21:criticalBugs": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1.0,
+            "median": 0.0
+          },
+          "22:highPriorityBugs": {
+            "valid": 324,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+          }
+        },
+        "identity_column_index": 0,
+        "unique_identities": 324,
+        "duplicate_identities": 0,
+        "missing_identities": 0,
+        "labels": {
+          "field": "bugs",
+          "raw_distribution": {
+            "0": 195,
+            "1": 80,
+            "10": 1,
+            "13": 1,
+            "2": 25,
+            "3": 9,
+            "4": 8,
+            "5": 2,
+            "7": 2,
+            "8": 1
+          },
+          "zero": 195,
+          "positive": 129,
+          "invalid": 0,
+          "positive_fraction_valid": 0.39814814814814814
+        },
+        "project_versions": null
+      },
+      "lucene.csv": {
+        "raw_columns": [
+          "classname ",
+          " cbo ",
+          " dit ",
+          " fanIn ",
+          " fanOut ",
+          " lcom ",
+          " noc ",
+          " numberOfAttributes ",
+          " numberOfAttributesInherited ",
+          " numberOfLinesOfCode ",
+          " numberOfMethods ",
+          " numberOfMethodsInherited ",
+          " numberOfPrivateAttributes ",
+          " numberOfPrivateMethods ",
+          " numberOfPublicAttributes ",
+          " numberOfPublicMethods ",
+          " rfc ",
+          " wmc ",
+          " bugs ",
+          " nonTrivialBugs ",
+          " majorBugs ",
+          " criticalBugs ",
+          " highPriorityBugs ",
+          " "
+        ],
+        "columns_trimmed_for_audit_only": [
+          "classname",
+          "cbo",
+          "dit",
+          "fanIn",
+          "fanOut",
+          "lcom",
+          "noc",
+          "numberOfAttributes",
+          "numberOfAttributesInherited",
+          "numberOfLinesOfCode",
+          "numberOfMethods",
+          "numberOfMethodsInherited",
+          "numberOfPrivateAttributes",
+          "numberOfPrivateMethods",
+          "numberOfPublicAttributes",
+          "numberOfPublicMethods",
+          "rfc",
+          "wmc",
+          "bugs",
+          "nonTrivialBugs",
+          "majorBugs",
+          "criticalBugs",
+          "highPriorityBugs",
+          ""
+        ],
+        "rows": 691,
+        "malformed_rows": 0,
+        "duplicate_rows_exact": 0,
+        "duplicate_column_names": [],
+        "missing_by_column_index_and_name": {
+          "0:classname": 0,
+          "1:cbo": 0,
+          "2:dit": 0,
+          "3:fanIn": 0,
+          "4:fanOut": 0,
+          "5:lcom": 0,
+          "6:noc": 0,
+          "7:numberOfAttributes": 0,
+          "8:numberOfAttributesInherited": 0,
+          "9:numberOfLinesOfCode": 0,
+          "10:numberOfMethods": 0,
+          "11:numberOfMethodsInherited": 0,
+          "12:numberOfPrivateAttributes": 0,
+          "13:numberOfPrivateMethods": 0,
+          "14:numberOfPublicAttributes": 0,
+          "15:numberOfPublicMethods": 0,
+          "16:rfc": 0,
+          "17:wmc": 0,
+          "18:bugs": 0,
+          "19:nonTrivialBugs": 0,
+          "20:majorBugs": 0,
+          "21:criticalBugs": 0,
+          "22:highPriorityBugs": 0,
+          "23:": 691
+        },
+        "numeric_summary": {
+          "1:cbo": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 179.0,
+            "median": 5.0
+          },
+          "2:dit": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 1.0,
+            "max": 5.0,
+            "median": 2.0
+          },
+          "3:fanIn": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 174.0,
+            "median": 1.0
+          },
+          "4:fanOut": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 28.0,
+            "median": 3.0
+          },
+          "5:lcom": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 7875.0,
+            "median": 10.0
+          },
+          "6:noc": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 42.0,
+            "median": 0.0
+          },
+          "7:numberOfAttributes": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 64.0,
+            "median": 3.0
+          },
+          "8:numberOfAttributesInherited": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 56.0,
+            "median": 0.0
+          },
+          "9:numberOfLinesOfCode": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2864.0,
+            "median": 39.0
+          },
+          "10:numberOfMethods": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 126.0,
+            "median": 5.0
+          },
+          "11:numberOfMethodsInherited": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 106.0,
+            "median": 15.0
+          },
+          "12:numberOfPrivateAttributes": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 45.0,
+            "median": 1.0
+          },
+          "13:numberOfPrivateMethods": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 47.0,
+            "median": 0.0
+          },
+          "14:numberOfPublicAttributes": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 27.0,
+            "median": 0.0
+          },
+          "15:numberOfPublicMethods": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 55.0,
+            "median": 3.0
+          },
+          "16:rfc": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 908.0,
+            "median": 16.0
+          },
+          "17:wmc": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 484.0,
+            "median": 10.0
+          },
+          "18:bugs": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 9.0,
+            "median": 0.0
+          },
+          "19:nonTrivialBugs": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+          },
+          "20:majorBugs": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+          },
+          "21:criticalBugs": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+          },
+          "22:highPriorityBugs": {
+            "valid": 691,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+          }
+        },
+        "identity_column_index": 0,
+        "unique_identities": 691,
+        "duplicate_identities": 0,
+        "missing_identities": 0,
+        "labels": {
+          "field": "bugs",
+          "raw_distribution": {
+            "0": 627,
+            "1": 51,
+            "2": 4,
+            "3": 4,
+            "4": 3,
+            "5": 1,
+            "9": 1
+          },
+          "zero": 627,
+          "positive": 64,
+          "invalid": 0,
+          "positive_fraction_valid": 0.09261939218523878
+        },
+        "project_versions": null
+      },
+      "mylyn.csv": {
+        "raw_columns": [
+          "classname ",
+          " cbo ",
+          " dit ",
+          " fanIn ",
+          " fanOut ",
+          " lcom ",
+          " noc ",
+          " numberOfAttributes ",
+          " numberOfAttributesInherited ",
+          " numberOfLinesOfCode ",
+          " numberOfMethods ",
+          " numberOfMethodsInherited ",
+          " numberOfPrivateAttributes ",
+          " numberOfPrivateMethods ",
+          " numberOfPublicAttributes ",
+          " numberOfPublicMethods ",
+          " rfc ",
+          " wmc ",
+          " bugs ",
+          " nonTrivialBugs ",
+          " majorBugs ",
+          " criticalBugs ",
+          " highPriorityBugs ",
+          " "
+        ],
+        "columns_trimmed_for_audit_only": [
+          "classname",
+          "cbo",
+          "dit",
+          "fanIn",
+          "fanOut",
+          "lcom",
+          "noc",
+          "numberOfAttributes",
+          "numberOfAttributesInherited",
+          "numberOfLinesOfCode",
+          "numberOfMethods",
+          "numberOfMethodsInherited",
+          "numberOfPrivateAttributes",
+          "numberOfPrivateMethods",
+          "numberOfPublicAttributes",
+          "numberOfPublicMethods",
+          "rfc",
+          "wmc",
+          "bugs",
+          "nonTrivialBugs",
+          "majorBugs",
+          "criticalBugs",
+          "highPriorityBugs",
+          ""
+        ],
+        "rows": 1862,
+        "malformed_rows": 0,
+        "duplicate_rows_exact": 0,
+        "duplicate_column_names": [],
+        "missing_by_column_index_and_name": {
+          "0:classname": 0,
+          "1:cbo": 0,
+          "2:dit": 0,
+          "3:fanIn": 0,
+          "4:fanOut": 0,
+          "5:lcom": 0,
+          "6:noc": 0,
+          "7:numberOfAttributes": 0,
+          "8:numberOfAttributesInherited": 0,
+          "9:numberOfLinesOfCode": 0,
+          "10:numberOfMethods": 0,
+          "11:numberOfMethodsInherited": 0,
+          "12:numberOfPrivateAttributes": 0,
+          "13:numberOfPrivateMethods": 0,
+          "14:numberOfPublicAttributes": 0,
+          "15:numberOfPublicMethods": 0,
+          "16:rfc": 0,
+          "17:wmc": 0,
+          "18:bugs": 0,
+          "19:nonTrivialBugs": 0,
+          "20:majorBugs": 0,
+          "21:criticalBugs": 0,
+          "22:highPriorityBugs": 0,
+          "23:": 1862
+        },
+        "numeric_summary": {
+          "1:cbo": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 259.0,
+            "median": 4.0
+          },
+          "2:dit": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 1.0,
+            "max": 5.0,
+            "median": 1.0
+          },
+          "3:fanIn": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 223.0,
+            "median": 1.0
+          },
+          "4:fanOut": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 62.0,
+            "median": 3.0
+          },
+          "5:lcom": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 7021.0,
+            "median": 10.0
+          },
+          "6:noc": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 49.0,
+            "median": 0.0
+          },
+          "7:numberOfAttributes": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 128.0,
+            "median": 2.0
+          },
+          "8:numberOfAttributesInherited": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 25.0,
+            "median": 0.0
+          },
+          "9:numberOfLinesOfCode": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 7509.0,
+            "median": 38.0
+          },
+          "10:numberOfMethods": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 119.0,
+            "median": 5.0
+          },
+          "11:numberOfMethodsInherited": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 226.0,
+            "median": 9.0
+          },
+          "12:numberOfPrivateAttributes": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 103.0,
+            "median": 1.0
+          },
+          "13:numberOfPrivateMethods": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 24.0,
+            "median": 0.0
+          },
+          "14:numberOfPublicAttributes": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 127.0,
+            "median": 0.0
+          },
+          "15:numberOfPublicMethods": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 98.0,
+            "median": 4.0
+          },
+          "16:rfc": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1266.0,
+            "median": 16.0
+          },
+          "17:wmc": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 727.0,
+            "median": 8.0
+          },
+          "18:bugs": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 12.0,
+            "median": 0.0
+          },
+          "19:nonTrivialBugs": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 8.0,
+            "median": 0.0
+          },
+          "20:majorBugs": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1.0,
+            "median": 0.0
+          },
+          "21:criticalBugs": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1.0,
+            "median": 0.0
+          },
+          "22:highPriorityBugs": {
+            "valid": 1862,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2.0,
+            "median": 0.0
+          }
+        },
+        "identity_column_index": 0,
+        "unique_identities": 1862,
+        "duplicate_identities": 0,
+        "missing_identities": 0,
+        "labels": {
+          "field": "bugs",
+          "raw_distribution": {
+            "0": 1617,
+            "1": 186,
+            "12": 1,
+            "2": 41,
+            "3": 12,
+            "4": 4,
+            "8": 1
+          },
+          "zero": 1617,
+          "positive": 245,
+          "invalid": 0,
+          "positive_fraction_valid": 0.13157894736842105
+        },
+        "project_versions": null
+      },
+      "pde.csv": {
+        "raw_columns": [
+          "classname ",
+          " cbo ",
+          " dit ",
+          " fanIn ",
+          " fanOut ",
+          " lcom ",
+          " noc ",
+          " numberOfAttributes ",
+          " numberOfAttributesInherited ",
+          " numberOfLinesOfCode ",
+          " numberOfMethods ",
+          " numberOfMethodsInherited ",
+          " numberOfPrivateAttributes ",
+          " numberOfPrivateMethods ",
+          " numberOfPublicAttributes ",
+          " numberOfPublicMethods ",
+          " rfc ",
+          " wmc ",
+          " bugs ",
+          " nonTrivialBugs ",
+          " majorBugs ",
+          " criticalBugs ",
+          " highPriorityBugs ",
+          " "
+        ],
+        "columns_trimmed_for_audit_only": [
+          "classname",
+          "cbo",
+          "dit",
+          "fanIn",
+          "fanOut",
+          "lcom",
+          "noc",
+          "numberOfAttributes",
+          "numberOfAttributesInherited",
+          "numberOfLinesOfCode",
+          "numberOfMethods",
+          "numberOfMethodsInherited",
+          "numberOfPrivateAttributes",
+          "numberOfPrivateMethods",
+          "numberOfPublicAttributes",
+          "numberOfPublicMethods",
+          "rfc",
+          "wmc",
+          "bugs",
+          "nonTrivialBugs",
+          "majorBugs",
+          "criticalBugs",
+          "highPriorityBugs",
+          ""
+        ],
+        "rows": 1497,
+        "malformed_rows": 0,
+        "duplicate_rows_exact": 0,
+        "duplicate_column_names": [],
+        "missing_by_column_index_and_name": {
+          "0:classname": 0,
+          "1:cbo": 0,
+          "2:dit": 0,
+          "3:fanIn": 0,
+          "4:fanOut": 0,
+          "5:lcom": 0,
+          "6:noc": 0,
+          "7:numberOfAttributes": 0,
+          "8:numberOfAttributesInherited": 0,
+          "9:numberOfLinesOfCode": 0,
+          "10:numberOfMethods": 0,
+          "11:numberOfMethodsInherited": 0,
+          "12:numberOfPrivateAttributes": 0,
+          "13:numberOfPrivateMethods": 0,
+          "14:numberOfPublicAttributes": 0,
+          "15:numberOfPublicMethods": 0,
+          "16:rfc": 0,
+          "17:wmc": 0,
+          "18:bugs": 0,
+          "19:nonTrivialBugs": 0,
+          "20:majorBugs": 0,
+          "21:criticalBugs": 0,
+          "22:highPriorityBugs": 0,
+          "23:": 1497
+        },
+        "numeric_summary": {
+          "1:cbo": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 362.0,
+            "median": 7.0
+          },
+          "2:dit": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 1.0,
+            "max": 9.0,
+            "median": 2.0
+          },
+          "3:fanIn": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 355.0,
+            "median": 1.0
+          },
+          "4:fanOut": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 48.0,
+            "median": 4.0
+          },
+          "5:lcom": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 3321.0,
+            "median": 21.0
+          },
+          "6:noc": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 46.0,
+            "median": 0.0
+          },
+          "7:numberOfAttributes": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2169.0,
+            "median": 2.0
+          },
+          "8:numberOfAttributesInherited": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 206.0,
+            "median": 0.0
+          },
+          "9:numberOfLinesOfCode": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1326.0,
+            "median": 52.0
+          },
+          "10:numberOfMethods": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 82.0,
+            "median": 7.0
+          },
+          "11:numberOfMethodsInherited": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 602.0,
+            "median": 10.0
+          },
+          "12:numberOfPrivateAttributes": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 39.0,
+            "median": 1.0
+          },
+          "13:numberOfPrivateMethods": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 52.0,
+            "median": 0.0
+          },
+          "14:numberOfPublicAttributes": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2168.0,
+            "median": 0.0
+          },
+          "15:numberOfPublicMethods": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 53.0,
+            "median": 4.0
+          },
+          "16:rfc": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 599.0,
+            "median": 25.0
+          },
+          "17:wmc": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 286.0,
+            "median": 13.0
+          },
+          "18:bugs": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 28.0,
+            "median": 0.0
+          },
+          "19:nonTrivialBugs": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2.0,
+            "median": 0.0
+          },
+          "20:majorBugs": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 2.0,
+            "median": 0.0
+          },
+          "21:criticalBugs": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 1.0,
+            "median": 0.0
+          },
+          "22:highPriorityBugs": {
+            "valid": 1497,
+            "invalid_nonmissing": 0,
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+          }
+        },
+        "identity_column_index": 0,
+        "unique_identities": 1497,
+        "duplicate_identities": 0,
+        "missing_identities": 0,
+        "labels": {
+          "field": "bugs",
+          "raw_distribution": {
+            "0": 1288,
+            "1": 143,
+            "2": 44,
+            "28": 1,
+            "3": 10,
+            "4": 5,
+            "5": 4,
+            "6": 2
+          },
+          "zero": 1288,
+          "positive": 209,
+          "invalid": 0,
+          "positive_fraction_valid": 0.1396125584502338
+        },
+        "project_versions": null
+      }
+    },
+    "total_rows": 5371,
+    "table_count": 5,
+    "project_inventory": {
+      "eclipse.csv": [
+        {
+          "project": "eclipse",
+          "version": null
+        }
+      ],
+      "equinox.csv": [
+        {
+          "project": "equinox",
+          "version": null
+        }
+      ],
+      "lucene.csv": [
+        {
+          "project": "lucene",
+          "version": null
+        }
+      ],
+      "mylyn.csv": [
+        {
+          "project": "mylyn",
+          "version": null
+        }
+      ],
+      "pde.csv": [
+        {
+          "project": "pde",
+          "version": null
+        }
+      ]
+    },
+    "class_level_evidence": "Upstream documentation plus class identifiers; metric compatibility is unvalidated."
+  }
+}

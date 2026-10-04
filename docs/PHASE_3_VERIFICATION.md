@@ -1,8 +1,8 @@
 # Phase 3 verification — 2026-10-04
 
-**INCOMPLETE — hosted CI verification pending**
+**COMPLETE / FROZEN**
 
-Local implementation and acceptance checks pass. No hosted run for these Phase 3 changes has been observed. The owner's earlier green GitHub Actions confirmation closes Phase 2 only. Phase 4 is **NOT READY** and has not started. No commit, push or deployment was performed.
+Local implementation and acceptance checks pass. The project owner confirmed hosted Phase 3 GitHub Actions is green for the delivered implementation (repository head `42c1855` at confirmation). Evidence is owner confirmation; no workflow URL was supplied or independently inspected. Phase 4A acquisition/provenance/audit is now explicitly authorized. No later Phase 4 work is authorized.
 
 ## Continuation audit
 
@@ -37,7 +37,7 @@ Remaining work completed: stricter metric-schema validation; Python multiline-st
 | Phase 2 data-preserving migration | PASS — existing user/session/READY project survives Phase 3 upgrade; analysis works; Phase 3 downgrade/re-upgrade removes only analysis data |
 | CI YAML structure | PASS — parsed and checked expected backend/frontend/infrastructure jobs |
 | `git diff --check` | PASS |
-| Hosted Phase 3 GitHub Actions | **NOT TESTED — pending** |
+| Hosted Phase 3 GitHub Actions | **PASS — confirmed by project owner** |
 
 GNU Make is absent locally; equivalent commands ran directly. The native Python runtime was 3.14.7, Java 25.0.4.1 and Node 22.23.1; exact runtime versions are persisted. Docker verification used the production-shaped worker toolchain above. Native compiled wrapper artifacts were copied from the trusted Docker build because the host has a JRE but no javac. These ignored artifacts are not committed. CI installs a JDK 17 and compiles only KageX's own wrapper.
 
@@ -146,7 +146,7 @@ Every criterion from the Phase 3 request is recorded below. PASS is evidence fro
 | Infrastructure | Worker includes required trusted analyzers | PASS |
 | Infrastructure | Real analysis works in container stack | PASS |
 | CI | Phase 3 workflow configured | PASS |
-| CI | Hosted CI green | **NOT TESTED — pending** |
+| CI | Hosted CI green | **PASS — confirmed by project owner** |
 
 ## Important file inventory
 
@@ -160,4 +160,4 @@ Java grammar is Java 11 and unresolved dependencies can affect CK binding metric
 
 Linux subprocess protections and Compose isolation are required for the documented worker behavior. Normal cleanup is verified; hard-kill scratch requires container restart/native orphan recovery. Stale-state cleanup is request-triggered. Admission quotas, production retention/reconciliation and horizontal scaling hardening remain outside this local foundation. Parser tools are trusted dependencies, not a claim of protection against every possible parser vulnerability.
 
-Before Phase 4, confirm hosted CI, then freeze exact tool/runtime/schema semantics for dataset extraction. Dataset feature names alone are insufficient compatibility evidence. Required granularities remain Java class, Python function, JavaScript file; TypeScript remains static-only. Feature ordering and preprocessing must be specified by the future dataset/model contract. No model may be substituted or metrics filled to force inference.
+Hosted Phase 3 CI is owner-confirmed; exact tool/runtime/schema semantics are frozen for dataset work. Phase 4A acquisition/provenance/audit is authorized separately. Dataset feature names alone are insufficient compatibility evidence. Required granularities remain Java class, Python function, JavaScript file; TypeScript remains static-only. Feature ordering and preprocessing must be specified by the future dataset/model contract. No model may be substituted or metrics filled to force inference.

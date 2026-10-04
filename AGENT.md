@@ -1089,7 +1089,7 @@ At the start of Phase 1:
 
 ## 44. Phase 3 Operational Rules
 
-- Phase 3 is authorized; check PROJECT_STATE.md for remaining verification. Do not start Phase 4.
+- Phase 3 is complete/frozen; the owner confirmed hosted CI success. Phase 4A only is now authorized: acquisition, provenance and audit. Do not begin training, transformations, splits or compatibility validation.
 - READY remains source preparation. AnalysisRun has separate QUEUED/RUNNING/COMPLETED/FAILED states; results are immutable after completion and retries create another run.
 - Metric feature sets, semantics, tool versions and limitations are in docs/METRIC_SCHEMAS.md. Never silently change them or equate similarly named metrics across languages.
 - Run source analyzers only in the worker using KageX-owned fixed tools/configuration. Never execute submitted source or install its dependencies.
@@ -1097,3 +1097,12 @@ At the start of Phase 1:
 - Worker Docker image has trusted Java/Node runtimes, read-only source storage and bounded ephemeral scratch space. Rebuild worker after analyzer edits. Keep CK artifact readable by the non-root worker.
 - All analysis endpoints must reuse project ownership/CSRF protection. PostgreSQL is authoritative; enforce active-run uniqueness and atomic publication.
 - No prediction/risk/model behavior exists in Phase 3. TypeScript prediction remains MODEL_UNAVAILABLE. Hosted Phase 3 CI must pass before phase closure.
+
+## 45. Phase 4A Operational Rules
+
+- Only acquisition, provenance and descriptive audit are authorized. Do not train, transform features, construct labels/splits, select features, balance classes or implement inference. Do not start Phase 4B.
+- Use `backend/app/dataset_sources.py`'s fixed approved catalog and `uv run python -m app.datasets` from backend. Read `docs/PHASE_4A_DATASET_AUDIT.md` and the five `data/manifests` records before resuming. Valid existing downloads must be verified and preserved; never regenerate a manifest just to accept changed upstream bytes.
+- Benchmark repositories are untrusted data. No scripts, tests, dependency installs, hooks or binaries may run. Never deserialize untrusted pickle/joblib. Reuse secure archive extraction; keep raw/interim/processed data ignored.
+- Unknown versions/licenses remain null. An acquired metadata repository is not a ready supervised dataset. PyTraceBugs' official archive is unavailable; no substitute mirror is authorized.
+- Candidate features use actual Phase 3 contracts. Names alone do not establish compatibility. Keep TypeScript MODEL_UNAVAILABLE.
+- Phase 3 hosted CI is owner-confirmed green. Phase 4A needs its own hosted success; local passes do not close that gate. Preserve the explicit pending status until it passes.

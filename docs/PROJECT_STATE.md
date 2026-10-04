@@ -8,22 +8,36 @@
 Phase 0 — Technical Research & Architecture Freeze: COMPLETE / FROZEN
 Phase 1 — Repository Bootstrap & Developer Environment: COMPLETE / FROZEN
 Phase 2 — Authentication, Projects & Secure Ingestion: COMPLETE / FROZEN
-Phase 3 — Static Analysis Engine: INCOMPLETE — hosted CI verification pending
-Phase 4 — Dataset Pipeline & Model Training: NOT STARTED / NOT READY
+Phase 3 — Static Analysis Engine: COMPLETE / FROZEN
+Phase 4A — Dataset Acquisition, Provenance & Audit: INCOMPLETE — hosted CI verification pending
+Phase 4B and later — NOT STARTED / NOT READY
 ```
 
-The project owner confirmed Phase 1 and Phase 2 hosted CI success. Phase 2 was continued from the existing partial implementation, preserving valid work, and all applicable local and hosted gates pass. No deployment or destructive Git operation was performed. The pre-existing `.gitignore` decision to allow project documentation remains preserved.
+The project owner confirmed Phase 1, Phase 2 and Phase 3 hosted CI success. The Phase 3 confirmation applies to the delivered implementation at repository head `42c1855`; no workflow URL was supplied or independently inspected. Phase 4A needs its own hosted success. No deployment or destructive Git operation was performed. The pre-existing `.gitignore` decision to allow project documentation remains preserved.
 
-## Current Phase 3 Handoff
+## Current Phase 4A Handoff
 
-Continued the existing partial Phase 3 implementation; valid work was preserved. Local implementation includes four real analyzers, versioned metric contracts, safe discovery/tool processes, PostgreSQL runs/entities, owner-scoped APIs, asynchronous Celery lifecycle, and frontend start/history/status/metrics/warnings. No Phase 4 code was added.
+- **COMPLETE:** Fixed approved-source acquisition CLI, five provenance/checksum manifests, inert extraction, descriptive profiles, all 37 Phase 3 feature candidates, license/scope findings, offline tests and relevant regression checks. No model work or feature compatibility claim.
+- **PARTIAL:** PyTraceBugs README/LICENSE acquired; official v1 archive returned HTTP 404. BugsJS acquisition is explicitly metadata plus one coverage archive, not full source histories. Jureczko acquisition is the Ant/jEdit deposits, not the whole collection.
+- **REMAINING:** Hosted GitHub Actions must pass for these Phase 4A changes before phase closure. Do not start Phase 4B.
+- **BLOCKED:** PyTraceBugs full artifact; manual author restoration/checksum/license action is documented. No mirror/substitute is authorized.
+
+Measured inventory: Jureczko **2,494 class rows / 6 tables / 2 projects**; D'Ambros **5,371 class rows / 5 tables / 5 projects**; BugsInPy **501 bug instances / 17 projects**; BugsJS **453 bugs / 10 projects**. PyTraceBugs data counts remain null. BugsInPy contains **168 abbreviated revision pairs** and **one identical buggy/fixed pair with an empty patch**. No Python function labels or JavaScript file labels were manufactured. TypeScript remains `MODEL_UNAVAILABLE`.
+
+All **54 downloaded artifacts** and **2,375 extracted files** are SHA-256 inventoried. Raw/interim/processed paths are ignored; five JSON manifests are intended for Git. No dependencies, migrations, production analyzers, API/worker behavior, frontend or Docker files were changed. No benchmark code/tests/setup scripts ran, no benchmark dependencies were installed and no pickle was deserialized.
+
+Local checks: **118 distinct backend tests pass (13 new, 105 existing)** across the full regression run and final focused tooling run; Ruff lint/format and mypy pass on **54 Python files**. All five manifests/local inventories validate and fresh audit profiles match exactly. Existing CI discovers the new offline tests without dataset downloads. Hosted Phase 4A CI remains **NOT TESTED**. No commit or push was performed during this work.
+
+Full evidence, acquisition commands, manual blocker and acceptance matrix: [PHASE_4A_DATASET_AUDIT.md](PHASE_4A_DATASET_AUDIT.md). Feature candidates and frozen analyzer versions: [PHASE_4A_FEATURE_REFERENCE.md](PHASE_4A_FEATURE_REFERENCE.md).
+
+## Completed Phase 3 Handoff
+
+Continued the existing partial Phase 3 implementation; valid work was preserved. Its implementation includes four real analyzers, versioned metric contracts, safe discovery/tool processes, PostgreSQL runs/entities, owner-scoped APIs, asynchronous Celery lifecycle, and frontend start/history/status/metrics/warnings. No Phase 4 code was part of that phase.
 
 - **COMPLETE:** Core implementation, schema validation, analyzer correctness/security fixtures, persistence/ownership/idempotency/failure tests, frontend workflow, migration round trips, trusted worker image and CI setup.
-- **PARTIAL:** Formal Phase 3 closure requires a hosted run for the delivered revision.
-- **REMAINING:** Run hosted GitHub Actions after publishing the reviewed changes; record the exact successful run before freezing Phase 3.
-- **BLOCKED:** No hosted Phase 3 success has been observed. Phase 2's green CI does not prove Phase 3.
+- **HOSTED CI:** PASS, confirmed by the owner. Phase 3 is complete/frozen; no Phase 3 implementation work remains.
 
-Local backend verification: **105 tests pass**, including the 77 baseline tests, 18 analyzer/security cases and 10 lifecycle/API/migration cases; Ruff lint/format and mypy pass on 50 Python files. Frontend: **18 tests pass**, lint/format/types/build pass. Docker runs all four analyzers through real Celery/Redis/PostgreSQL; mixed fixtures persist nine entities. **Four browser tests pass**, covering successful mixed analysis and no-entity failure at 1440px and 390px. Detailed final gate evidence and all 71 acceptance criteria (70 PASS, hosted CI NOT TESTED) are in [PHASE_3_VERIFICATION.md](PHASE_3_VERIFICATION.md).
+Phase 3 local backend verification: **105 tests pass**, including the 77 baseline tests, 18 analyzer/security cases and 10 lifecycle/API/migration cases; Ruff lint/format and mypy pass on 50 Python files. Frontend: **18 tests pass**, lint/format/types/build pass. Docker runs all four analyzers through real Celery/Redis/PostgreSQL; mixed fixtures persist nine entities. **Four browser tests pass**, covering successful mixed analysis and no-entity failure at 1440px and 390px. Detailed final gate evidence and all 71 acceptance criteria, including owner-confirmed hosted success, are in [PHASE_3_VERIFICATION.md](PHASE_3_VERIFICATION.md).
 
 Important continuation notes: CK 0.7.0 has Java 11 grammar; its artifact must remain readable by UID 10001. Python MI is measured on normalized AST source. Java bindings can be incomplete without dependencies. Distinct language schemas and full tool/runtime version metadata must remain intact. See [METRIC_SCHEMAS.md](METRIC_SCHEMAS.md) and TD-013–015. Source preparation remains Phase 2 synchronous ingestion; static analysis is asynchronous. There is no ML, prediction, risk, SHAP or recommendation implementation.
 
@@ -77,7 +91,7 @@ GNU Make is absent on this host; equivalent commands were executed directly. The
 
 ## Next Task
 
-Phase 3 local work is implemented; hosted CI is the remaining formal gate. Review/publish the existing changes and verify the hosted run before marking Phase 3 complete. Do not restart implementation or begin Phase 4. Preserve the Phase 2 ownership, session, ingestion, storage, and no-source-execution contracts.
+Review the existing Phase 4A change and verify hosted CI after publication before marking Phase 4A complete. Keep the external PyTraceBugs blocker and all dataset limitations visible. Do not restart completed work or begin Phase 4B. Preserve ownership, session, ingestion, storage, analyzer schemas and no-source-execution contracts.
 
 Useful commands: `docker compose up --build --wait`; backend `uv run pytest`, `uv run alembic check`; frontend `npm run test:e2e` against the running full stack. README contains all checks and environment settings. Backend tests need real PostgreSQL and schema-creation privileges; export `TEST_DATABASE_URL` for non-default test credentials.
 

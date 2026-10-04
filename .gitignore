@@ -24,3 +24,8 @@ test-results/
 .data/
 backend/app/analyzers/tools/ck.jar
 backend/app/analyzers/tools/*.class
+
+# Dataset bytes and generated profiles stay local; provenance manifests are tracked.
+/data/raw/
+/data/interim/
+/data/processed/
