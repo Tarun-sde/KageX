@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import Literal
 from urllib.parse import urlsplit
 
-from pydantic import Field, SecretStr, ValidationInfo, field_validator
+from pydantic import Field, SecretStr, ValidationInfo, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -24,6 +24,37 @@ class Settings(BaseSettings):
     celery_broker_url: SecretStr = SecretStr("")
     celery_result_backend: SecretStr = SecretStr("")
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = "INFO"
+
+    session_ttl_seconds: int = Field(default=3600, ge=60, le=86400)
+    project_storage_root: Path = (
+        Path(__file__).resolve().parents[3] / ".data" / "sources"
+    )
+    max_upload_size_mb: int = Field(default=25, ge=1, le=100)
+    max_extracted_size_mb: int = Field(default=100, ge=1, le=1000)
+    max_archive_files: int = Field(default=2000, ge=1, le=10000)
+    max_file_size_mb: int = Field(default=10, ge=1, le=100)
+    max_compression_ratio: int = Field(default=100, ge=1, le=1000)
+    ingestion_timeout_seconds: int = Field(default=30, ge=1, le=120)
+
+    @model_validator(mode="after")
+    def production_safety(self) -> Settings:
+        if self.app_env == "production" and (
+            not self.frontend_url.startswith("https://")
+            or not self.cors_allowed_origins
+            or any(
+                not origin.startswith("https://")
+                for origin in self.cors_allowed_origins
+            )
+        ):
+            raise ValueError(
+                "Production authentication requires explicit HTTPS origins"
+            )
+        if (
+            not self.project_storage_root.is_absolute()
+            or self.project_storage_root == Path("/")
+        ):
+            raise ValueError("Storage requires a dedicated absolute directory")
+        return self
 
     @field_validator("frontend_url")
     @classmethod

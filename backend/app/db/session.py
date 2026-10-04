@@ -9,7 +9,7 @@ from app.core.config import Settings
 
 
 class Base(DeclarativeBase):
-    """Shared metadata for future models; no domain tables in Phase 1."""
+    """Shared metadata for versioned application models."""
 
 
 def create_db_engine(settings: Settings) -> Engine:

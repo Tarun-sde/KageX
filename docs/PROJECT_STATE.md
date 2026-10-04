@@ -1,104 +1,69 @@
 # KageX Project State
 
-> **Project:** KageX — AI-Powered Software Defect Prediction & Code Risk Analysis  
-> **Tagline:** Detect the unseen.  
-> **Last updated:** 2026-10-04  
-> **Implementation plan version:** 1.0 (unchanged)
+> Last updated: 2026-10-04. Frozen implementation plan version: 1.0.
 
 ## Current Status
 
 ```text
 Phase 0 — Technical Research & Architecture Freeze: COMPLETE / FROZEN
-Phase 1 — Repository Bootstrap & Developer Environment: INCOMPLETE — hosted CI gate pending
-Phase 2 — Authentication, Projects & Secure Ingestion: NOT STARTED
+Phase 1 — Repository Bootstrap & Developer Environment: COMPLETE / FROZEN
+Phase 2 — Authentication, Projects & Secure Ingestion: INCOMPLETE — hosted CI verification pending
+Phase 3 — Static Analysis Engine: NOT STARTED / NOT AUTHORIZED
 ```
 
-Phase 1 implementation and local verification are finished. The frozen roadmap also requires **CI is green**. No hosted GitHub Actions run exists for these local changes, so Phase 1 is deliberately not marked complete. No Phase 2 work has started.
+The project owner confirmed Phase 1 hosted CI success. Phase 2 was continued from the current partial implementation, preserving valid work. All applicable local implementation/verification gates now pass; the updated workflow has not run successfully on hosted GitHub Actions for these uncommitted changes. No commit, push, deployment, or destructive Git operation was performed. The pre-existing `.gitignore` decision to allow project documentation remains preserved.
 
-The repository had a modified README and untracked planning documents before implementation. That work was preserved; no commit, push, deployment, or destructive Git operation was performed.
+## Completed Phase 2 Work
 
-## Implemented Foundation
-
-- React/TypeScript/Vite/Tailwind shell, React Router routes `/`, `/app`, and fallback.
-- Dark design tokens, serif display hierarchy, responsive panels, buttons, navigation, focus/skip-link behavior, and reduced-motion support.
-- Typed API service validates actual health/readiness responses, applies a request timeout, and supports explicit checking/connected/unavailable states and retry.
-- FastAPI factory with typed environment settings, restricted CORS, startup logging, safe error responses, and resource cleanup.
-- Unversioned `/health` liveness and `/ready` PostgreSQL/Redis checks; `/api/v1/status` reports foundation scope and `analysis_available: false`.
-- SQLAlchemy engine, declarative metadata, request session dependency, and Alembic revision `0001`. No domain tables exist.
-- Redis connection and Celery JSON-only task foundation; `kagex.ping` verifies actual broker/worker/result transport.
-- Development Dockerfiles and Compose: PostgreSQL, Redis, migrations, backend, worker, frontend; health-gated startup and persistent PostgreSQL volume.
-- Locked Python/npm dependencies; Ruff, mypy, pytest, ESLint, Prettier, TypeScript, Vitest/Testing Library; GitHub Actions checks and Docker integration.
-- Root environment example, ignore rules, Makefile shortcuts, and complete Docker/native development instructions in README.
+- PostgreSQL users, opaque hashed sessions, and owner-scoped projects; Alembic `6e605e1f5bed` after baseline `0001`.
+- Registration, Argon2id password hashing, login/session rotation, current user, expiry/inactive-user checks, logout revocation, HttpOnly cookies, production Secure/host-only cookie policy, CSRF checks, restricted credentialed CORS, safe public schemas/errors.
+- Project create/list/detail/rename/delete; owner filtering on every route, including uploads/imports; foreign/missing IDs share 404. Non-blocking row locks protect concurrent mutations.
+- ZIP and public GitHub archive intake through one bounded inert extractor. UUID storage isolation, central-directory preflight, traversal/type/size/ratio/count/time protections, temporary cleanup, failure persistence, safe retries, and source deletion.
+- Protected frontend sign-in/registration/project list/create/detail/source/rename/delete flows with real loading/error/empty/preparing states. READY explicitly means source prepared, never analysis complete.
+- Private non-root Docker source volume, expanded environment documentation, PostgreSQL CI service/migration tests, and Playwright desktop/mobile Docker E2E job.
+- README/API/security/retention instructions, AGENT operational guidance, and additive TD-009 through TD-012 decisions.
 
 ## Verification Executed
 
-| Check | Result |
+Full evidence, security coverage, file inventory, and every acceptance criterion are in [PHASE_2_VERIFICATION.md](PHASE_2_VERIFICATION.md).
+
+| Gate | Actual result |
 |---|---|
-| `uv sync --locked` / `npm ci` | PASS |
-| Backend `ruff check .` | PASS |
-| Backend `ruff format --check .` | PASS — 16 source files |
-| Backend `mypy .` | PASS — 16 source files |
-| Backend `pytest` | PASS — **9 tests**, no warnings in final run |
-| Frontend `npm run lint` | PASS |
-| Frontend `npm run format:check` | PASS |
-| Frontend `npm run typecheck` | PASS |
-| Frontend `npm test` | PASS — **5 tests** |
-| Frontend `npm run build` | PASS |
-| `docker compose config --quiet` | PASS |
-| `docker compose up --build --wait --wait-timeout 180` | PASS — all five long-running services healthy; migration job exited 0 |
-| Live `/health` / `/ready` | PASS — API live, PostgreSQL and Redis ready |
-| Actual queued Celery ping/result | PASS — `pong` |
-| Alembic generation, upgrade, downgrade, schema check | PASS — temporary autogenerated revision applied, rolled back, removed; DB restored to `0001` |
-| PostgreSQL schema inspection | PASS — only `alembic_version`, no future domain tables |
-| Native backend startup, health, readiness | PASS — tested on port 8011 |
-| Native Vite startup / shell response | PASS — tested on port 5174 |
-| Chromium at 1440, 768, 390, 320px | PASS — routes, live connection, readiness, no horizontal overflow |
-| Chromium failure/retry, fallback route, page errors | PASS — no JavaScript page errors |
-| Source/secret/starter audit | PASS — no probable real secrets or dead starter code found |
-| Hosted GitHub Actions | **NOT TESTED** — workflow has not been pushed/run |
+| Locked dependency installation | PASS — `uv sync --locked`, `npm ci`; npm audit reports zero vulnerabilities |
+| Ruff lint / format / mypy | PASS — 31 Python files |
+| Backend pytest | PASS — **77 tests**, including all 9 Phase 1 tests |
+| Frontend lint / format / TypeScript | PASS |
+| Frontend Vitest | PASS — **14 tests**, including foundation regressions adapted to protected workspace |
+| Frontend production build | PASS |
+| Playwright against Docker | PASS — **2 tests**, complete account/project lifecycle at 1440px and 390px; no page errors/overflow |
+| Docker config/build/startup | PASS — all five long-running services healthy, migrations exited 0 |
+| `/health`, `/ready` and queued Celery result | PASS — PostgreSQL/Redis ready, `pong` through real broker/worker |
+| Container Alembic schema check | PASS — no pending operations |
+| Fresh PostgreSQL database in Docker | PASS — upgrade, schema check, downgrade to base, re-upgrade, schema check; disposable database removed |
+| Isolated-schema integration tests | PASS — real migrations, independent transactions, ownership/locking/failure/retry checks |
+| Live public GitHub import | PASS — octocat/Hello-World snapshot reached READY; verification project/source deleted |
+| Native API/Vite startup | PASS — readiness at 8011, frontend at 5174; temporary native processes stopped |
+| CI YAML parsing/structure | PASS — PyYAML parsing and job/step checks; reviewed service/command wiring |
+| Source/credential audit and diff whitespace | PASS — no source execution/installation path, no probable secret-pattern matches, `.env`/`.data` ignored |
+| Hosted Phase 2 GitHub Actions | **NOT TESTED** — remaining formal gate |
 
-Browser tooling and screenshots were temporary verification artifacts outside the repository; no Playwright dependency was added before a critical product flow exists. GNU Make is absent on this host, so the equivalent documented commands were executed directly. Native verification processes were stopped; the tested Compose development stack remains running on ports 5173/8000.
+GNU Make is absent on this host; equivalent commands were executed directly. The verified Compose stack remains running at localhost:5173 / localhost:8000. Browser tests leave disposable test accounts; their projects are deleted. Final staging and deletion quarantine inspection found zero entries.
 
-## Important Commands
+## Important Implementation Decisions
 
-See [README](../README.md) for environment variables and full setup.
+- Sessions are database-revocable opaque cookies, not JWTs. One-hour absolute expiry by default; no refresh endpoint or localStorage credentials.
+- Source metadata lives on Project. Only User, AuthSession, Project were added; no speculative analysis/ML/job tables.
+- Bounded preparation remains synchronous for Phase 2. Celery remains verified and available for the future asynchronous full-analysis pipeline; no ingestion Celery task exists.
+- Source cannot be replaced after READY. Failed ingestion can be retried safely. Binary/nested archives are stored only as inert files.
+- Native source root is ignored `.data/sources`; Docker root is private `/app/storage`. Prepared source is retained until project deletion in development; normal staging is context-managed and removed on success/failure.
+- A crash between filesystem and DB operations can require offline reconciliation. Production retention/garbage collection, authentication throttling and quotas remain deployment hardening work. See TD-011 and README for the actual limitations and recovery approach.
+- Review corrected duplicate generated enum constraints, malformed GitHub URL handling, disconnected/failed upload state, and ZIP offset ambiguity before final verification.
 
-```bash
-cp .env.example .env
-docker compose up --build --wait
-# With GNU Make installed:
-make install
-make check
-# Native, from backend:
-uv run python -m app
-uv run alembic upgrade head
-uv run celery -A app.workers.celery_app:celery_app worker --loglevel=INFO --concurrency=1
-# Native, from frontend:
-npm run dev
-```
+## Remaining Gate and Next Task
 
-## Phase 1 Implementation Choices
+Obtain a green hosted run of the updated `.github/workflows/ci.yml` for the delivered Phase 2 revision, then record the actual run URL/result. **Phase 2 remains incomplete and Phase 3 is NOT READY.** Do not start analyzers or ML now.
 
-- Python 3.14 and uv 0.12.23; Node 24 recommended, Node 22.12+ within major 22 supported.
-- TypeScript 6.0.3 remains within the current typescript-eslint compatibility range; other exact versions are recorded in lockfiles and summarized in README.
-- Starlette TestClient uses its supported `httpx2` transport; its deprecated `httpx` fallback was removed after verification surfaced a warning.
-- `/health` stays inexpensive; dependency checks live in `/ready`. Worker transport is verified separately.
-- The migration baseline is intentionally empty apart from Alembic history.
-- The requested dark presentation adapts the visual reference without modifying it. Font fallbacks avoid external font requests; no prototype scripts/demo data enter application code.
-- Future ML, analyzers, charts, 3D, authentication, and ingestion dependencies are not installed yet.
-
-## Security and Final Audit
-
-No upload, archive extraction, GitHub cloning, source execution, analyzer, inference endpoint, or fake prediction is implemented. API error logs omit raw exception messages and input. CORS uses explicit configured origins; Compose host ports bind to loopback. Runtime settings redact secret values. `.env`, generated dependencies, builds, and caches are ignored.
-
-Audit covered TODO/FIXME, prior project names, fake prediction indicators, API keys/tokens, `MODEL_UNAVAILABLE`, localhost URLs, credentials, dependencies, and default starter assets/text. Localhost values are limited to documented development settings, health checks, CI, and tests. Credentials are disposable local/test examples. No probable real secret was found. Original Axisflow branding, figures, and contract prediction examples remain solely in existing reference/planning documents; they are not application output.
-
-## Remaining Gate and Next Handoff
-
-- **Blocker to formal Phase 1 completion:** obtain an actual green hosted run of `.github/workflows/ci.yml` for the reviewed changes.
-- **Next authorized work:** finish that Phase 1 verification gate and record its run/result. The next roadmap phase is Phase 2; it has not been implemented or marked complete.
-- After phase closure, Phase 2 introduces authentication/ownership, project entities, and secure ZIP/public GitHub ingestion. Add real models/migrations then, keep shared metadata explicit, and expand allowed CORS methods alongside the actual API.
-- Preserve static-only processing and the frozen per-language/TypeScript rules below.
+Useful commands: `docker compose up --build --wait`; backend `uv run pytest`, `uv run alembic check`; frontend `npm run test:e2e` against the running full stack. README contains all checks and environment settings. Backend tests need real PostgreSQL and schema-creation privileges; export `TEST_DATABASE_URL` for non-default test credentials.
 
 ---
 
@@ -145,3 +110,48 @@ All Phase 0 research requirements are finalized in `docs/TECHNICAL_DECISIONS.md`
 
 ---
 
+## Phase 1 — Foundation / Repository Bootstrap
+
+**Status:** COMPLETE / FROZEN
+
+### Verification
+- Backend tests: PASS
+- Frontend tests: PASS
+- Python lint/format/type checks: PASS
+- Frontend lint/type/build checks: PASS
+- Docker Compose validation: PASS
+- PostgreSQL connectivity: PASS
+- Redis connectivity: PASS
+- Celery worker/task verification: PASS
+- Hosted GitHub Actions CI: PASS
+
+### Phase 1 Result
+The KageX development foundation is complete and verified.
+
+Implemented:
+- React + TypeScript + Vite frontend
+- Tailwind CSS design foundation
+- FastAPI backend
+- Typed environment configuration
+- PostgreSQL + SQLAlchemy
+- Alembic migrations
+- Redis
+- Celery
+- Docker + Docker Compose
+- Health/readiness endpoints
+- Frontend/backend integration
+- Testing and static analysis
+- GitHub Actions CI
+
+### Frozen Constraints Preserved
+- Separate per-language ML models
+- Java: class-level prediction
+- Python: function-level prediction
+- JavaScript: file-level prediction
+- TypeScript defect prediction: MODEL_UNAVAILABLE
+- Uploaded user code is never executed
+- No fake ML predictions or model outputs
+
+### Historical Phase 1 Handoff
+
+Phase 1 authorized Phase 2. The current Phase 2 implementation and remaining hosted CI gate are recorded at the top of this document. The pasted continuation instructions have been incorporated into that current status and verification record.

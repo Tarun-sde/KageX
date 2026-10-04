@@ -52,6 +52,21 @@
 }
 
 @layer components {
+  .field {
+    @apply flex flex-col gap-3 text-sm font-medium;
+  }
+  .field input,
+  .field select {
+    @apply min-h-12 min-w-0 w-full rounded-lg border border-line bg-canvas px-4 py-3 text-foreground;
+  }
+  .field input[type='file'] {
+    @apply text-xs;
+  }
+  .field input:disabled,
+  .field select:disabled {
+    @apply opacity-60;
+  }
+
   .container-shell {
     @apply mx-auto w-full max-w-7xl px-6 sm:px-10 lg:px-16;
   }

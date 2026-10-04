@@ -1069,9 +1069,20 @@ At the start of Phase 1:
 - Backend checks: `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy .`, `uv run pytest` from `backend`.
 - Frontend checks: `npm run lint`, `npm run format:check`, `npm run typecheck`, `npm test`, `npm run build` from `frontend`.
 - Root `make check` runs both check groups; `make install` installs locked dependencies.
-- Migrations: `cd backend && uv run alembic upgrade head`; no domain schema exists yet.
+- Migrations: `cd backend && uv run alembic upgrade head`; consult PROJECT_STATE.md for the current schema.
 - `/health` is dependency-free liveness; `/ready` checks PostgreSQL/Redis; application routes use `/api/v1`.
 - Tailwind theme and shared CSS primitives live in `frontend/src/styles/index.css`.
 - Keep frontend API requests in `frontend/src/services/api.ts`. Preserve unavailable states and response validation.
 - Add future models to shared metadata and Alembic imports when their phase begins. Do not add domain tables to the Phase 1 baseline.
 - CI configuration exists, but formal completion requires an observed green hosted run; consult PROJECT_STATE.md for actual verification.
+
+## 43. Phase 2 Operational Rules
+
+- Current domains are User, AuthSession, and Project. Source metadata is on Project; no analysis/ML tables or analyzer implementation belong to Phase 2.
+- Cookie authentication requires trusted Origin plus `X-KageX-Request: 1` on unsafe requests. Never put session tokens into browser storage.
+- All project endpoints, including both ingestion routes, use the central owned-project dependency. Preserve row locking on mutations.
+- ZIP requests use raw ZIP bytes, not multipart. Never replace the bounded manual extractor with `extractall`, execution, imports, or repository dependency installation.
+- Backend integration tests use real PostgreSQL, isolated schemas, and Alembic. Export `TEST_DATABASE_URL` when not using disposable Compose defaults.
+- Run `npm run test:e2e` in frontend with the full stack running after changes to authentication or project workflows.
+- Private source retention and crash-recovery limitations are documented in README and TD-011. Never expose the source volume as a static route.
+- Phase 2 remains incomplete until a hosted CI run passes for the delivered revision. Phase 3 is not authorized by this implementation.

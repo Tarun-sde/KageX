@@ -19,4 +19,6 @@ coverage/
 .vscode/
 playwright-report/
 test-results/
-docs/
+
+# Untrusted local project source
+.data/

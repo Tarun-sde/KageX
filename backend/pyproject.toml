@@ -13,6 +13,9 @@ dependencies = [
   "alembic>=1,<2",
   "redis>=6,<8",
   "celery[redis]>=5.5,<6",
+  "argon2-cffi>=25,<26",
+  "email-validator>=2,<3",
+  "httpx2>=2.13,<3",
 ]
 
 [dependency-groups]
@@ -21,7 +24,6 @@ dev = [
     "mypy",
     "pytest",
     "celery-types",
-    "httpx2>=2.13.1",
 ]
 
 [build-system]

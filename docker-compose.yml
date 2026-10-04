@@ -6,6 +6,14 @@ x-backend-environment: &backend-environment
   BACKEND_PORT: 8000
   FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
   CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-["http://localhost:5173"]}
+  PROJECT_STORAGE_ROOT: /app/storage
+  SESSION_TTL_SECONDS: ${SESSION_TTL_SECONDS:-3600}
+  MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB:-25}
+  MAX_EXTRACTED_SIZE_MB: ${MAX_EXTRACTED_SIZE_MB:-100}
+  MAX_ARCHIVE_FILES: ${MAX_ARCHIVE_FILES:-2000}
+  MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB:-10}
+  MAX_COMPRESSION_RATIO: ${MAX_COMPRESSION_RATIO:-100}
+  INGESTION_TIMEOUT_SECONDS: ${INGESTION_TIMEOUT_SECONDS:-30}
   LOG_LEVEL: ${LOG_LEVEL:-INFO}
   DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-kagex}:${POSTGRES_PASSWORD:-kagex_dev_only}@postgres:5432/${POSTGRES_DB:-kagex}
   REDIS_URL: redis://redis:6379/0
@@ -44,7 +52,7 @@ services:
     build: ./backend
     environment: *backend-environment
     ports: ["127.0.0.1:${BACKEND_PORT:-8000}:8000"]
-    volumes: ["./backend/app:/app/app:ro,Z"]
+    volumes: ["./backend/app:/app/app:ro,Z", "source_data:/app/storage"]
     depends_on:
       migrate: { condition: service_completed_successfully }
       redis: { condition: service_healthy }
@@ -81,3 +89,4 @@ services:
 
 volumes:
   postgres_data:
+  source_data:

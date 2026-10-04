@@ -58,3 +58,62 @@ export async function getReadiness(signal: AbortSignal): Promise<Readiness> {
   }
   return data as Readiness;
 }
+
+export class ApiError extends Error {
+  constructor(
+    public status: number,
+    public code: string,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+export async function apiRequest(
+  path: string,
+  init: RequestInit = {},
+): Promise<unknown> {
+  const response = await fetch(`${baseUrl}/api/v1${path}`, {
+    ...init,
+    credentials: 'include',
+    signal: init.signal
+      ? AbortSignal.any([init.signal, AbortSignal.timeout(130000)])
+      : AbortSignal.timeout(130000),
+    headers: {
+      Accept: 'application/json',
+      'X-KageX-Request': '1',
+      ...(typeof init.body === 'string'
+        ? { 'Content-Type': 'application/json' }
+        : {}),
+      ...init.headers,
+    },
+  });
+  if (response.status === 204) return null;
+  const data: unknown = await response.json();
+  if (!response.ok) {
+    if (response.status === 401)
+      window.dispatchEvent(new Event('kagex:unauthenticated'));
+    let code = 'REQUEST_FAILED';
+    let message = 'The request failed. Please try again.';
+    if (
+      data &&
+      typeof data === 'object' &&
+      'error' in data &&
+      data.error &&
+      typeof data.error === 'object'
+    ) {
+      if ('code' in data.error && typeof data.error.code === 'string')
+        code = data.error.code;
+      if ('message' in data.error && typeof data.error.message === 'string')
+        message = data.error.message;
+    }
+    throw new ApiError(response.status, code, message);
+  }
+  return data;
+}
+
+export function errorMessage(error: unknown): string {
+  return error instanceof ApiError
+    ? error.message
+    : 'Connection failed. Please try again.';
+}

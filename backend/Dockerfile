@@ -7,7 +7,7 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY app ./app
 COPY alembic ./alembic
 COPY alembic.ini ./
-RUN uv sync --frozen --no-dev && useradd --create-home --uid 10001 kagex && chown -R kagex:kagex /app
+RUN uv sync --frozen --no-dev && useradd --create-home --uid 10001 kagex && mkdir -p /app/storage && chmod 700 /app/storage && chown -R kagex:kagex /app
 USER kagex
 EXPOSE 8000
 CMD ["python", "-m", "app"]

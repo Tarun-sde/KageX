@@ -8,7 +8,21 @@ from starlette.exceptions import HTTPException
 logger = logging.getLogger(__name__)
 
 
+class APIError(HTTPException):
+    def __init__(self, status: int, code: str, message: str) -> None:
+        self.status, self.code, self.message = status, code, message
+        super().__init__(status_code=status, detail=message)
+
+
 def register_error_handlers(app: FastAPI) -> None:
+    @app.exception_handler(APIError)
+    async def api_error(request: Request, error: APIError) -> JSONResponse:
+        return JSONResponse(
+            status_code=error.status,
+            content={"error": {"code": error.code, "message": error.message}},
+            headers={"Cache-Control": "no-store"},
+        )
+
     @app.exception_handler(HTTPException)
     async def http_error(request: Request, error: HTTPException) -> JSONResponse:
         return JSONResponse(
